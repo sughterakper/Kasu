@@ -1,0 +1,99 @@
+/* ============================================================
+   Kasu — design tokens + type system.
+   Shared by the marketing site (style.css) and the app (app.css).
+
+   Identity notes, so nobody drifts:
+   · Foundation is a GREEN-leaning near-black on WARM ivory — not
+     black-on-white. Two accents, never interchangeable:
+       rust  = an action the user takes
+       leaf  = a fact Kasu has verified
+     gold is reserved exclusively for the inspection stamp.
+   · Display face is Bricolage Grotesque (chunky, contemporary).
+     No serif display anywhere — that is deliberately not our voice.
+   · Icons are SVG. Never emoji.
+   ============================================================ */
+
+@font-face{
+  font-family:"Bricolage Grotesque";
+  font-weight:400 800; font-stretch:100%; font-display:swap;
+  src:url("fonts/bricolage-var.woff2") format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face{
+  font-family:"Inter";
+  font-weight:100 900; font-display:swap;
+  src:url("fonts/inter-var.woff2") format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+:root{
+  /* --- surfaces --- */
+  --void:#0E100C;        /* deep green-black */
+  --soil:#191C15;        /* raised dark surface */
+  --soil-2:#252A20;
+  --ivory:#F7F4ED;       /* warm paper */
+  --ivory-2:#EFEBE1;
+  --card:#FFFFFF;
+  --line:#E2DCCF;
+  --line-dk:rgba(255,255,255,.11);
+
+  /* --- text --- */
+  --ink:#14170F;
+  --ink-2:#5B6152;       /* muted, green-leaning */
+  --ink-3:#8A9080;
+  --on-dark:#EDEAE1;
+  --on-dark-2:#9AA08F;
+
+  /* --- accents: rust = you act, leaf = we verified --- */
+  --rust:#D2451E;
+  --rust-dk:#9C2F12;
+  --rust-tint:#FCEDE6;
+  --leaf:#2C6E43;
+  --leaf-dk:#1E4E2F;
+  --leaf-tint:#E3EFE5;
+  --gold:#D9A013;        /* stamp only */
+  --gold-tint:#FBF1DA;
+  --alert:#B3402C;
+  --alert-tint:#F8E6E1;
+
+  /* --- shape + depth --- */
+  --r-sm:8px; --r:14px; --r-lg:22px; --r-xl:30px;
+  --sh-1:0 1px 2px rgba(20,23,15,.06);
+  --sh-2:0 6px 18px -6px rgba(20,23,15,.16);
+  --sh-3:0 24px 50px -18px rgba(20,23,15,.34);
+
+  /* --- motion (skill rule: 150-300ms micro, ease-out in) --- */
+  --t-fast:140ms cubic-bezier(.22,.61,.36,1);
+  --t:220ms cubic-bezier(.22,.61,.36,1);
+  --t-slow:380ms cubic-bezier(.22,.61,.36,1);
+
+  /* --- type --- */
+  --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"Inter",ui-sans-serif,system-ui,-apple-system,sans-serif;
+}
+
+*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+/* Visible focus everywhere — never removed (a11y priority 1) */
+:where(a,button,input,select,textarea,[tabindex]):focus-visible{
+  outline:2.5px solid var(--rust); outline-offset:2px; border-radius:4px;
+}
+
+.display{ font-family:var(--f-display); font-weight:800; letter-spacing:-.035em; line-height:.98; }
+.num{ font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1; }
+
+/* the wordmark — a leaf counter-cut into the K, set tight */
+.wm{ font-family:var(--f-display); font-weight:800; letter-spacing:-.045em;
+  display:inline-flex; align-items:center; gap:.34em; line-height:1; }
+.wm .mark{ width:.92em; height:.92em; flex:none; }
+
+/* icons: one family, 1.75 stroke, currentColor (skill rule: no emoji) */
+.ico{ width:20px; height:20px; flex:none; display:block; stroke:currentColor;
+  fill:none; stroke-width:1.75; stroke-linecap:round; stroke-linejoin:round; }
+.ico.lg{ width:24px; height:24px; }
+.ico.sm{ width:16px; height:16px; stroke-width:2; }
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{ animation-duration:.01ms !important; animation-iteration-count:1 !important;
+    transition-duration:.01ms !important; scroll-behavior:auto !important; }
+}

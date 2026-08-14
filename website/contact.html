@@ -1,0 +1,73 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Contact · Kasu</title><link rel="preload" href="assets/fonts/bricolage-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/style.css"></head><body>
+<nav class="nav"><div class="wrap"><a class="logo wm" href="index.html"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M4.6 11.6h22.8l-2 15.2a3 3 0 0 1-3 2.6H9.6a3 3 0 0 1-3-2.6l-2-15.2Z" fill="currentColor" opacity=".92"/><path d="M26 2.4c0 6.2-3.6 9.6-8.9 9.6-1.4 0-2.6-.2-3.6-.6 0-6.2 3.6-9.6 8.9-9.6 1.4 0 2.6.2 3.6.6Z" fill="currentColor"/><path d="M11.4 16.4v7.8M20.6 16.4v7.8" stroke="#0E100C" stroke-width="2.4" stroke-linecap="round" fill="none"/></svg>Kasu</a><div class="navlinks"><a href="index.html" class="nl">Home</a><a href="market.html" class="nl">Market</a><a href="weekly.html" class="nl">Weekly Basket</a><a href="guarantee.html" class="nl">Guarantee</a><a href="vendors.html" class="nl">Vendors</a><a href="contact.html" class="nl on">Contact</a><a class="appbtn" href="app.html#/buy/market">Open the app</a></div></div></nav>
+
+<header class="phead"><img src="assets/images/marketRow.jpg" alt="" loading="eager"><div class="sh"></div>
+  <div class="ph-in"><div class="eyebrow">Talk to a person</div><h2>Contact</h2>
+  <p>One number, one inbox, one WhatsApp thread. No ticket system, no queue position.</p></div>
+</header>
+
+<section class="pad"><div class="wrap">
+  <div class="cols2">
+    <div>
+      <div class="eyebrow">Reach us</div>
+      <h2 class="sechead">Fastest first</h2>
+      <div class="stack">
+        <a class="ctabig" href="https://wa.me/2348000000000" target="_blank" rel="noopener">WhatsApp · 0800 000 0000</a>
+        <div class="row"><div class="l"><span class="ic"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.4 4.5 10 8l-1.9 1.9a11 11 0 0 0 5.9 5.9L16 13.9l3.5 1.6v3.1a1.6 1.6 0 0 1-1.8 1.6C10.6 19.5 4.4 13.3 3.6 6.2A1.6 1.6 0 0 1 5.2 4.4h3.2Z"/></svg></span><div class="tx"><b>0800 000 0000</b><small>8am–7pm, every day</small></div></div><span class="chip a">Fastest</span></div>
+        <div class="row"><div class="l"><span class="ic"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17v12h-17V6Z"/><path d="m3.5 6.8 8.5 6 8.5-6"/></svg></span><div class="tx"><b>hello@kasu.ng</b><small>Replies within a day</small></div></div></div>
+        <div class="row"><div class="l"><span class="ic"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 21V4"/><path d="M5.5 5.2h12l-2.2 3.9 2.2 3.9h-12"/></svg></span><div class="tx"><b>Flag an item</b><small>Do it in the app — it's faster than messaging us</small></div></div><a class="chip v" href="app.html#/buy/track" style="text-decoration:none">Open app</a></div>
+      </div>
+
+      <div class="eyebrow" style="margin-top:1.8rem">Delivery windows</div>
+      <table class="hours">
+        <tr><td>Monday</td><td>10am – 7pm</td></tr>
+        <tr><td>Tuesday</td><td>10am – 7pm</td></tr>
+        <tr><td>Wednesday</td><td>10am – 7pm</td></tr>
+        <tr><td>Thursday</td><td>10am – 7pm</td></tr>
+        <tr><td>Friday</td><td>10am – 7pm</td></tr>
+        <tr><td>Saturday</td><td>9am – 4pm</td></tr>
+        <tr><td>Sunday</td><td>Closed — market run resumes Monday 06:15</td></tr>
+      </table>
+      <p class="note" style="margin-top:.8rem">Order cut-off is 6pm the night before. Same-day slots open at 7am if the morning run has capacity.</p>
+    </div>
+
+    <div>
+      <div class="eyebrow">Request an item</div>
+      <h2 class="sechead">Tell us what's missing</h2>
+      <p class="lead" style="margin-bottom:1rem">We add items only when a checker can judge them by hand. If it passes that test and enough people ask, it goes on the list.</p>
+      <form onsubmit="event.preventDefault();this.querySelector('.sent').style.display='block';">
+        <label for="cn">Your name</label>
+        <input id="cn" type="text" placeholder="Amaka">
+        <label for="cp">Phone or WhatsApp</label>
+        <input id="cp" type="tel" placeholder="0800 000 0000">
+        <label for="cd">District</label>
+        <select id="cd">
+          <option>Wuse II</option><option>Garki</option><option>Maitama</option><option>Jabi</option><option>Gwarinpa</option><option>Somewhere else in Abuja</option>
+        </select>
+        <label for="ci">What should we carry?</label>
+        <textarea id="ci" rows="4" placeholder="Ewedu, fresh ginger, dried crayfish…"></textarea>
+        <p style="margin-top:1rem"><button class="btn" type="submit">Send request</button></p>
+        <p class="sent note" style="display:none;color:var(--leaf);font-weight:700">Thanks — noted. This is a demo, so nothing was actually sent.</p>
+      </form>
+    </div>
+  </div>
+</div></section>
+
+<section class="pad quiet"><div class="wrap">
+  <div class="eyebrow">Where we deliver</div>
+  <h2 class="sechead">Five districts, for now</h2>
+  <a class="loc" href="https://www.google.com/maps/search/?api=1&query=Wuse%20Market%20Abuja" target="_blank" rel="noopener"><span class="pin"><svg class="ico lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.4-5.7-6.4-10.6a6.4 6.4 0 0 1 12.8 0C18.4 15.3 12 21 12 21Z"/><circle cx="12" cy="10.2" r="2.3"/></svg></span>
+    <span class="txt"><b>Wuse Market, Abuja</b><small>Delivering to Wuse II · Garki · Maitama · Jabi · Gwarinpa</small></span>
+    <span class="go">Directions</span></a>
+  <p class="note" style="margin-top:1rem">Outside these five? Send your district anyway — we open new zones based on where requests cluster, not on a map drawn in advance.</p>
+</div></section>
+
+<footer class="site"><div class="wrap"><p class="logo wm"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M4.6 11.6h22.8l-2 15.2a3 3 0 0 1-3 2.6H9.6a3 3 0 0 1-3-2.6l-2-15.2Z" fill="currentColor" opacity=".92"/><path d="M26 2.4c0 6.2-3.6 9.6-8.9 9.6-1.4 0-2.6-.2-3.6-.6 0-6.2 3.6-9.6 8.9-9.6 1.4 0 2.6.2 3.6.6Z" fill="currentColor"/><path d="M11.4 16.4v7.8M20.6 16.4v7.8" stroke="#0E100C" stroke-width="2.4" stroke-linecap="round" fill="none"/></svg>Kasu</p><p style="margin-top:1rem">Sourced at Wuse Market, Abuja · deliveries 8am–7pm<br>0800 000 0000 · hello@kasu.ng</p><div class="socialrow"><a href="app.html#/buy/market">Order now</a><a href="market.html">Market list</a><a href="guarantee.html">Guarantee</a></div><p class="note" style="margin-top:1.2rem;color:#6E6A65">Demo build · sample data · nothing is charged.</p></div></footer>
+
+<a class="wa" href="https://wa.me/2348000000000" target="_blank" rel="noopener" aria-label="Chat with Kasu on WhatsApp"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 11.6c0 4-3.8 7.2-8.5 7.2a9.9 9.9 0 0 1-2.7-.4L4 20l1.5-4a6.8 6.8 0 0 1-2-4.4c0-4 3.8-7.2 8.5-7.2s8.5 3.2 8.5 7.2Z"/></svg></a>
+<script src="assets/vendor/gsap.min.js"></script>
+<script src="assets/vendor/ScrollTrigger.min.js"></script>
+<script src="assets/site.js"></script>
+<script src="assets/gsap-scroll.js"></script></body></html>
