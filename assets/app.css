@@ -12,7 +12,7 @@
 /* Text size is a user setting, not a fixed choice. Everything below is sized in
    rem, so moving the root size scales the whole interface — including tap
    targets, because paddings are rem too. Set from the Me screen. */
-html{ font-size:16.5px; }
+html{ font-size:16px; }
 html[data-scale="lg"]{ font-size:19px; }
 html[data-scale="xl"]{ font-size:21.5px; }
 
@@ -50,23 +50,23 @@ input,select,textarea{ width:100%; font:inherit; color:var(--ink); background:#f
    that changed — see .bump, .fly and the tracking pulse. */
 
 /* ---------- top bar ---------- */
-.bar{ flex:none; background:var(--deep); color:var(--on-deep); padding:.9rem 1rem .85rem;
+.bar{ flex:none; background:var(--deep); color:var(--on-deep); padding:.8rem 1rem .7rem;
   position:relative; }
 .bar:after{ content:""; position:absolute; left:0; right:0; bottom:0; height:2px;
   background:repeating-linear-gradient(90deg,var(--act) 0 14px,var(--ok) 14px 22px,transparent 22px 40px); opacity:.55; }
 .bar .barrow{ display:flex; align-items:center; gap:.7rem; }
-.wm{ font-size:1.16rem; color:#fff; }
+.wm{ font-size:1.05rem; color:#fff; }
 .wm .mark{ color:var(--ok); }
 .bar .loc{ display:flex; align-items:center; gap:.28rem; font-size:.7rem; color:var(--on-deep-2);
   font-weight:500; margin-top:.18rem; }
 .bar .loc .ico{ width:13px; height:13px; }
-.iconbtn{ position:relative; width:2.75rem; height:2.75rem; border-radius:12px; background:oklch(1 0 0 / .09);
+.iconbtn{ position:relative; width:2.75rem; height:2.75rem; border-radius:11px; background:oklch(1 0 0 / .09);
   display:flex; align-items:center; justify-content:center; flex:none; transition:transform var(--t-fast),background var(--t-fast); }
 .iconbtn:active{ transform:scale(.94); background:rgba(255,255,255,.16); }
 .iconbtn .dot{ position:absolute; top:5px; right:5px; min-width:17px; height:17px; padding:0 4px;
   border-radius:9px; background:var(--act); color:#fff; font-size:.6rem; font-weight:800;
   display:flex; align-items:center; justify-content:center; border:2px solid var(--deep); }
-.searchb{ margin-top:.7rem; display:flex; align-items:center; gap:.5rem; min-height:2.75rem;
+.searchb{ margin-top:.6rem; display:flex; align-items:center; gap:.5rem; min-height:2.5rem;
   background:oklch(1 0 0 / .08); border-radius:11px; padding:.55rem .8rem;
   font-size:.82rem; color:var(--on-deep-2); }
 
@@ -84,11 +84,11 @@ input,select,textarea{ width:100%; font:inherit; color:var(--ink); background:#f
 @media (max-width:919px){
   .nav{ padding-bottom:calc(3.6rem + env(safe-area-inset-bottom,0px)); }
 }
-.nav a{ flex:1; min-height:54px; display:flex; flex-direction:column; align-items:center;
-  justify-content:center; gap:.16rem; font-size:.7rem; font-weight:700; letter-spacing:.01em;
+.nav a{ flex:1; min-height:52px; display:flex; flex-direction:column; align-items:center;
+  justify-content:center; gap:.1rem; font-size:.64rem; font-weight:700; letter-spacing:.01em;
   color:var(--ink-3); position:relative; transition:color var(--t-fast); text-align:center;
   line-height:1.15; }
-.nav a .ico{ width:1.45rem; height:1.45rem; transition:transform var(--t-fast); }
+.nav a .ico{ width:1.22rem; height:1.22rem; transition:transform var(--t-fast); }
 .nav a.on{ color:var(--act); }
 .nav a.on .ico{ transform:translateY(-1px); }
 .nav a.on:before{ content:""; position:absolute; top:0; width:22px; height:2.5px;
@@ -100,10 +100,10 @@ input,select,textarea{ width:100%; font:inherit; color:var(--ink); background:#f
 /* ---------- generic blocks ---------- */
 .pad{ padding:0 1rem; }
 .head{ display:flex; align-items:center; gap:.65rem; padding:.95rem 1rem .35rem; }
-.back{ width:2.7rem; height:2.7rem; border-radius:11px; background:#fff; border:1px solid var(--line);
+.back{ width:2.75rem; height:2.75rem; border-radius:11px; background:#fff; border:1px solid var(--line);
   display:flex; align-items:center; justify-content:center; flex:none; }
 .head h2{ font-size:1.35rem; }
-.sect{ display:flex; align-items:baseline; justify-content:space-between; gap:.6rem; padding:1.15rem 1rem .5rem; }
+.sect{ display:flex; align-items:baseline; justify-content:space-between; gap:.6rem; padding:1.5rem 1rem .55rem; }
 .sect h3{ font-size:1.18rem; }
 .sect .m{ font-size:.78rem; color:var(--ink-3); font-weight:700; }
 /* .eye is reserved for genuinely named artifacts (the inspection ledger,
@@ -116,7 +116,7 @@ input,select,textarea{ width:100%; font:inherit; color:var(--ink); background:#f
 .note{ font-size:.78rem; color:var(--ink-3); }
 
 .card{ background:#fff; border:1px solid var(--line); border-radius:var(--r); box-shadow:var(--sh-1); }
-.panel{ margin:.75rem 1rem 0; background:#fff; border:1px solid var(--line);
+.panel{ margin:.9rem 1rem 0; background:#fff; border:1px solid var(--line);
   border-radius:var(--r); box-shadow:var(--sh-1); padding:.9rem 1rem; }
 .panel.dark{ background:var(--deep-2); border-color:var(--line-on-deep); color:var(--on-deep); }
 .panel.dark h3{ color:#fff; }
@@ -244,6 +244,24 @@ input,select,textarea{ width:100%; font:inherit; color:var(--ink); background:#f
 .sizebtn.on .l{ color:var(--act-press); }
 
 /* ============================================================
+   SEALED GOODS — a glyph tile, never a photograph.
+   Nobody inspects a sealed bag of salt, so it does not get the
+   inspection stamp. Making that visible in the card is the whole
+   point: photo = a person looked at it, tile = it came sealed.
+   ============================================================ */
+.pc .im.sealed{ display:flex; align-items:center; justify-content:center;
+  background:var(--sunken); color:var(--ink-3); }
+.pc .im.sealed .ico{ width:2.5rem; height:2.5rem; stroke-width:1.4; }
+.pc.is-sealed .im{ border-bottom:1px solid var(--line); }
+.sealb{ position:absolute; top:.4rem; left:.4rem; font-size:.62rem; font-weight:800;
+  letter-spacing:.04em; text-transform:uppercase; color:var(--ink-3);
+  background:var(--surface); border:1px solid var(--line);
+  padding:.16rem .36rem; border-radius:5px; }
+.th.sealed,.mth.sealed,.pth.sealed{ display:flex; align-items:center; justify-content:center;
+  background:var(--sunken); color:var(--ink-3); }
+.th.sealed .ico{ width:1.4rem; height:1.4rem; stroke-width:1.5; }
+
+/* ============================================================
    WELCOME — the one screen that earns Committed colour.
    Everything else in the app is Restrained; this is the single
    surface where the brand green carries the whole thing.
@@ -302,7 +320,7 @@ input,select,textarea{ width:100%; font:inherit; color:var(--ink); background:#f
 .trackbar small{ font-size:.76rem; color:var(--on-deep-2); }
 
 /* ---------- streak + points (engagement) ---------- */
-.streak{ display:flex; gap:.5rem; padding:.75rem 1rem 0; }
+.streak{ display:flex; gap:.55rem; padding:.9rem 1rem 0; }
 .spill{ flex:1; display:flex; align-items:center; gap:.5rem; background:#fff; border:1px solid var(--line);
   border-radius:12px; padding:.55rem .7rem; box-shadow:var(--sh-1); }
 .spill .ic{ width:30px; height:30px; border-radius:9px; display:flex; align-items:center;
@@ -327,7 +345,7 @@ input,select,textarea{ width:100%; font:inherit; color:var(--ink); background:#f
 .mover .d.dn{ color:var(--ok); } .mover .d.up{ color:var(--bad); }
 
 /* ---------- promo ---------- */
-.promo{ position:relative; margin:.85rem 1rem 0; border-radius:var(--r-lg); overflow:hidden;
+.promo{ position:relative; margin:1rem 1rem 0; border-radius:var(--r-lg); overflow:hidden;
   min-height:158px; display:flex; align-items:flex-end; color:#fff; }
 .promo img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
 /* The scrim carries the contrast on its own rather than assuming the photo
@@ -344,15 +362,15 @@ input,select,textarea{ width:100%; font:inherit; color:var(--ink); background:#f
   background:#fff; color:var(--deep); border-radius:9px; font-size:.7rem; font-weight:800; }
 
 /* ---------- chips ---------- */
-.chips{ display:flex; gap:.4rem; padding:.85rem 1rem .15rem; overflow-x:auto; scrollbar-width:none; }
+.chips{ display:flex; gap:.4rem; padding:1rem 1rem .2rem; overflow-x:auto; scrollbar-width:none; }
 .chips::-webkit-scrollbar{ display:none }
-.chip{ flex:none; min-height:2.7rem; padding:0 .95rem; display:flex; align-items:center;
+.chip{ flex:none; min-height:2.75rem; padding:0 .95rem; display:flex; align-items:center;
   border-radius:999px; background:#fff; border:1px solid var(--line);
   font-size:.82rem; font-weight:700; white-space:nowrap; transition:all var(--t-fast); }
 .chip.on{ background:var(--deep); border-color:var(--deep); color:#fff; }
 
 /* ---------- product grid ---------- */
-.grid{ display:grid; grid-template-columns:1fr 1fr; gap:.65rem; padding:.65rem 1rem 0; }
+.grid{ display:grid; grid-template-columns:1fr 1fr; gap:.85rem; padding:.5rem 1rem 0; }
 .pc{ background:#fff; border:1px solid var(--line); border-radius:var(--r); overflow:hidden;
   box-shadow:var(--sh-1); transition:transform var(--t-fast), box-shadow var(--t); }
 .pc:active{ transform:scale(.985); }
@@ -362,17 +380,17 @@ input,select,textarea{ width:100%; font:inherit; color:var(--ink); background:#f
 /* the inspection stamp — gold, corner-set, rotated. Ours. */
 .stampb{ position:absolute; top:6px; left:6px; display:flex; align-items:center; gap:.22rem;
   background:oklch(0.255 0.045 158 / .94); color:var(--gold-on-deep);
-  font-size:.62rem; font-weight:800; letter-spacing:.04em; text-transform:uppercase;
-  padding:.2rem .38rem; border-radius:5px; }
-.stampb .ico{ width:10px; height:10px; stroke-width:3; }
-.pc .bd{ padding:.55rem .65rem .6rem; }
+  font-size:.58rem; font-weight:800; letter-spacing:.03em; text-transform:uppercase;
+  padding:.16rem .32rem; border-radius:4px; }
+.stampb .ico{ width:9px; height:9px; stroke-width:3.2; }
+.pc .bd{ padding:.6rem .7rem .65rem; }
 .pc .nm{ font-size:.9rem; font-weight:700; line-height:1.25; }
 .pc .un{ font-size:.78rem; color:var(--ink-3); margin-top:.08rem; min-height:1.6em; }
 .pc .ft{ display:flex; align-items:center; justify-content:space-between; gap:.4rem; margin-top:.45rem; }
 .pc .pr{ font-weight:750; font-size:1.1rem; }
 /* The visual button stays 34px so it does not dominate a small card, but the
    hit area is pushed out to the 44px minimum with a pseudo-element. */
-.add{ width:34px; height:34px; border-radius:10px; background:var(--deep); color:#fff;
+.add{ width:2rem; height:2rem; border-radius:9px; background:var(--deep); color:#fff;
   display:flex; align-items:center; justify-content:center; flex:none; position:relative;
   transition:transform var(--t-fast), background var(--t-fast); }
 .add:after{ content:; position:absolute; top:50%; left:50%; width:44px; height:44px;
@@ -560,3 +578,50 @@ input,select,textarea{ width:100%; font:inherit; color:var(--ink); background:#f
 .panel.leaf .note, .panel.gold .note, .panel.rust .note,
 .panel.leaf .tiny, .panel.gold .tiny, .panel.rust .tiny,
 .minbar small, .slot .tm{ color:var(--ink-2); }
+
+/* thumbnail variants share one shape so mixed photo/glyph lists stay even */
+.mth,.pth,.mvth{ border-radius:11px; object-fit:cover; flex:none; background:var(--sunken); }
+.mth{ width:2.75rem; height:2.75rem; }
+.pth{ width:3.2rem; height:3.2rem; }
+.mvth{ width:1.9rem; height:1.9rem; border-radius:8px; }
+.mth.sealed .ico,.pth.sealed .ico{ width:1.4rem; height:1.4rem; stroke-width:1.5; }
+
+/* inline text buttons still need a 44px lane to be tappable */
+.linkbtn{ display:inline-flex; align-items:center; justify-content:center; min-height:2.75rem;
+  padding:0 .6rem; text-decoration:underline; font-weight:600; color:var(--ink-2); }
+
+/* ============================================================
+   MARKET HEADER — collapsed.
+   Two stat cards and a full-width reorder panel used to push the
+   first product 650px down an 844px screen. Same information, one
+   slim strip and one row: the shelf now starts near the top.
+   ============================================================ */
+.statstrip{ display:flex; align-items:center; gap:.7rem; margin:.7rem 1rem 0;
+  padding:.5rem .8rem; background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); box-shadow:var(--sh-1); font-size:.82rem; color:var(--ink-2); }
+.statstrip .s{ display:inline-flex; align-items:center; gap:.35rem; white-space:nowrap; }
+.statstrip .s .ic{ display:inline-flex; }
+.statstrip .ico{ width:1rem; height:1rem; }
+.statstrip .leaf{ color:var(--ok); } .statstrip .gold{ color:var(--gold-ink); }
+.statstrip b{ color:var(--ink); font-weight:750; }
+.statstrip .div{ width:1px; height:1.1rem; background:var(--line); }
+.statstrip .more{ margin-left:auto; display:flex; align-items:center; justify-content:center;
+  width:1.6rem; height:1.6rem; color:var(--ink-3); flex:none; }
+
+.usual{ display:flex; align-items:center; gap:.7rem; width:calc(100% - 2rem);
+  margin:.6rem 1rem 0; padding:.6rem .8rem; text-align:left;
+  background:var(--ok-tint); border:1px solid oklch(0.885 0.040 158);
+  border-radius:var(--r); transition:transform var(--t-fast); }
+.usual:active{ transform:scale(.99); }
+.usual .ic{ display:flex; align-items:center; justify-content:center; flex:none;
+  width:2rem; height:2rem; border-radius:50%; background:var(--surface); color:var(--ok); }
+.usual .ic .ico{ width:1.05rem; height:1.05rem; }
+.usual .tx{ flex:1; min-width:0; }
+.usual .tx b{ display:block; font-size:.86rem; color:var(--ink); }
+.usual .tx small{ display:block; font-size:.76rem; color:var(--ink-2);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.usual .cta{ flex:none; font-size:.78rem; font-weight:700; color:var(--ok-deep);
+  border:1px solid var(--ok); border-radius:999px; padding:.3rem .7rem; }
+
+/* the promo now sits below the shelf, so give it separation from the grid */
+.promo{ margin-top:1.4rem !important; }

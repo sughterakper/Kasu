@@ -365,11 +365,17 @@
   /* ============================================================
      BUYER — market
      ============================================================ */
+  /* One visual rule, no exceptions: a photograph means a person inspected it,
+     a glyph tile means it arrived sealed. That distinction is the product, so
+     it is worth carrying in the card itself rather than in a footnote. */
   function pcard(p) {
     var q = S.cart[p.id] || 0;
-    return '<article class="pc">' +
-      '<div class="im"><img src="'+IMG+p.img+'" alt="'+esc(p.name)+'" loading="lazy">' +
-        '<span class="stampb">'+I('check')+t('checked_at')+' 07:42</span></div>' +
+    var top = p.sealed
+      ? '<div class="im sealed">' + I(p.glyph || 'sachet') +
+          '<span class="sealb">' + t('sealed') + '</span></div>'
+      : '<div class="im"><img src="'+IMG+p.img+'" alt="'+esc(p.name)+'" loading="lazy">' +
+          '<span class="stampb">'+I('check')+t('checked_at')+' 07:42</span></div>';
+    return '<article class="pc' + (p.sealed ? ' is-sealed' : '') + '">' + top +
       '<div class="bd"><h4 class="nm">'+esc(p.name)+'</h4>' +
       '<p class="un">'+esc(p.unit)+'</p>' +
       '<div class="ft"><span class="pr num">'+fmt(p.price)+'</span>' +
@@ -378,33 +384,45 @@
       '</div></div></article>';
   }
 
+  /* Row thumbnails follow the same rule. */
+  function thumb(p, cls) {
+    return p.sealed
+      ? '<span class="th sealed">' + I(p.glyph || 'sachet') + '</span>'
+      : '<img class="' + (cls || 'th') + '" src="'+IMG+p.img+'" alt="" loading="lazy">';
+  }
+
+  function inCat(p, cat) {
+    if (cat === 'all') return true;
+    if (cat === 'pantry') return p.cat === 'pantry';
+    if (cat === 'fresh')  return p.cat !== 'pantry';
+    return p.cat === cat;
+  }
+
   function screenMarket() {
-    var list = S.cat==='all' ? KASU.PRODUCTS : KASU.PRODUCTS.filter(function(p){ return p.cat===S.cat; });
+    var list = KASU.PRODUCTS.filter(function(p){ return inCat(p, S.cat); });
     var label = KASU.CATS.filter(function(c){ return c.id===S.cat; })[0];
 
+    /* Order matters more than size here. Everything that is not a product is
+       chrome competing with the one thing the shopper came for, so the stats
+       collapse to a single slim strip and the package promo moves below the
+       grid — the shelf starts near the top instead of 650px down. */
     var h = trackbar();
 
-    h += '<div class="streak">' +
-      '<div class="spill"><span class="ic leaf">'+I('streak')+'</span><div style="flex:1;min-width:0">' +
-        '<div class="v num">'+S.streak+' '+t('streak_weeks')+'</div><div class="l">'+t('streak_label')+'</div>' +
-        '<div class="pips">'+[0,1,2,3,4,5].map(function(i){ return '<i class="'+(i<(S.streak%6||6)?'on':'')+'"></i>'; }).join('')+'</div>' +
-      '</div></div>' +
-      '<div class="spill"><span class="ic gold">'+I('star')+'</span><div>' +
-        '<div class="v num">'+S.points.toLocaleString()+'</div><div class="l">'+t('points_label')+'</div>' +
-      '</div></div></div>';
+    h += '<div class="statstrip">' +
+      '<span class="s"><span class="ic leaf">'+I('streak')+'</span>' +
+        '<b class="num">'+S.streak+'</b> '+t('streak_weeks')+'</span>' +
+      '<span class="div"></span>' +
+      '<span class="s"><span class="ic gold">'+I('star')+'</span>' +
+        '<b class="num">'+S.points.toLocaleString()+'</b> '+t('points_label')+'</span>' +
+      '<a class="more" href="#/buy/me" aria-label="'+t('me_title')+'">'+I('right')+'</a></div>';
 
     if (S.lastBasket.length && !cartCount()) {
-      h += '<div class="panel leaf" style="display:flex;align-items:center;gap:.7rem">' +
-        '<span class="stamp sm leaf">'+I('refresh')+'</span>' +
-        '<div style="flex:1;min-width:0"><b style="font-size:.92rem">'+t('usual_title')+'</b>' +
-        '<div class="note">'+S.lastBasket.map(function(id){ return esc(P(id).name); }).join(' · ')+'</div></div>' +
-        '<button class="btnsm" onclick="KA.reorder()">'+t('usual_cta')+'</button></div>';
+      h += '<button class="usual" onclick="KA.reorder()">' +
+        '<span class="ic">'+I('refresh')+'</span>' +
+        '<span class="tx"><b>'+t('usual_title')+'</b>' +
+        '<small>'+S.lastBasket.map(function(id){ return esc(P(id).name); }).join(' · ')+'</small></span>' +
+        '<span class="cta">'+t('usual_cta')+'</span></button>';
     }
-
-    h += '<a class="promo" href="#/buy/packages"><img src="'+IMG+'basketBox.jpg" alt=""><span class="sh"></span>' +
-      '<div class="in"><div class="lbl">'+t('promo_eyebrow')+'</div>' +
-      '<h3>'+t('promo_title')+'</h3><p>'+t('promo_sub')+'</p>' +
-      '<span class="go">'+t('promo_cta')+' '+I('right')+'</span></div></a>';
 
     h += '<div class="chips">' + KASU.CATS.map(function(c){
       return '<button class="chip'+(S.cat===c.id?' on':'')+'" onclick="KA.cat(\''+c.id+'\')">'+esc(catLabel(c))+'</button>';
@@ -414,6 +432,11 @@
          '<span class="m">'+list.length+' '+t('items')+'</span></div>';
     h += '<div class="grid">' + list.map(pcard).join('') + '</div>';
 
+    h += '<a class="promo" href="#/buy/packages"><img src="'+IMG+'basketBox.jpg" alt=""><span class="sh"></span>' +
+      '<div class="in"><div class="lbl">'+t('promo_eyebrow')+'</div>' +
+      '<h3>'+t('promo_title')+'</h3><p>'+t('promo_sub')+'</p>' +
+      '<span class="go">'+t('promo_cta')+' '+I('right')+'</span></div></a>';
+
     return shell(h, 'buy', 'market', topbar());
   }
 
@@ -421,7 +444,7 @@
      BUYER — price board
      ============================================================ */
   function priceRow(p) {
-    return '<div class="prow"><img src="'+IMG+p.img+'" alt="" loading="lazy">' +
+    return '<div class="prow">' + thumb(p,'pth') +
       '<div class="bd"><div class="nm">'+esc(p.name)+'</div>' +
       '<div class="wy">'+esc(p.why)+'</div></div>' +
       '<div class="rt"><div class="pr num">'+fmt(p.price)+'</div>'+moveTag(p.delta)+'</div></div>';
@@ -484,7 +507,7 @@
         h += '<div class="sect"><h3>'+t('list_found')+'</h3><span class="m">'+r.found.length+'</span></div>';
         h += '<div>' + r.found.map(function (m) {
           var p = P(m.id);
-          return '<div class="match"><img src="'+IMG+p.img+'" alt="" loading="lazy">' +
+          return '<div class="match">' + thumb(p,'mth') +
             '<div class="bd"><div class="nm" style="font-weight:700">'+esc(p.name)+' × '+m.qty+'</div>' +
             '<div class="src">“'+esc(m.src)+'”</div></div>' +
             '<b class="num">'+fmt(p.price*m.qty)+'</b></div>';
@@ -500,7 +523,7 @@
         var sum = r.found.reduce(function(a,m){ return a + P(m.id).price*m.qty; }, 0);
         h += '<div class="panel"><div class="kv tot"><span>'+t('subtotal')+'</span><span class="num">'+fmt(sum)+'</span></div></div>';
         h += '<div class="sticky"><button class="btn" onclick="KA.listAddAll()">'+I('basket')+t('list_addall')+'</button>' +
-          '<p class="note" style="text-align:center;margin-top:.4rem"><button onclick="KA.listClear()" style="text-decoration:underline">'+t('cancel')+'</button></p></div>';
+          '<p class="note" style="text-align:center;margin-top:.4rem"><button class="linkbtn" onclick="KA.listClear()">'+t('cancel')+'</button></p></div>';
       }
     }
 
@@ -523,7 +546,7 @@
 
     h += '<div>' + ids.map(function (id) {
       var p = P(id);
-      return '<div class="row"><img class="th" src="'+IMG+p.img+'" alt="" loading="lazy">' +
+      return '<div class="row">' + thumb(p) +
         '<div class="bd"><div class="nm">'+esc(p.name)+'</div>' +
         '<div class="un num">'+fmt(p.price)+' · '+esc(p.unit)+'</div></div>' +
         '<div class="qty"><button class="qb" onclick="KA.dec(\''+id+'\')" aria-label="−">'+I('minus')+'</button>' +
@@ -670,7 +693,7 @@
 
     h += KASU.PRODUCTS.filter(function(p){ return p.cat!=='kits'; }).map(function (p) {
       var on = d.items.indexOf(p.id)>=0;
-      return '<div class="row"><img class="th" src="'+IMG+p.img+'" alt="" loading="lazy">' +
+      return '<div class="row">' + thumb(p) +
         '<div class="bd"><div class="nm">'+esc(p.name)+'</div>' +
         '<div class="un num">'+fmt(p.price)+' · '+esc(p.unit)+'</div></div>' +
         '<button class="sw'+(on?' on':'')+'" role="switch" aria-checked="'+on+'" ' +
@@ -873,7 +896,7 @@
     h += '<div class="sect"><h3>Confirm what you can supply</h3><span class="m">'+accepted+'/'+V.demand.length+'</span></div>';
     h += '<div>' + V.demand.map(function (d) {
       var p = P(d.id), on = !!S.accepted[d.id];
-      return '<div class="row"><img class="th" src="'+IMG+p.img+'" alt="" loading="lazy">' +
+      return '<div class="row">' + thumb(p) +
         '<div class="bd"><div class="nm">'+esc(p.name)+'</div>' +
         '<div class="un"><b class="num">'+d.qty+'</b> needed · '+esc(p.unit)+
         (d.locked ? ' · <span class="pill leaf">'+I('shield')+'fixed</span>' : '')+'</div></div>' +
@@ -909,7 +932,7 @@
     h += o.items.map(function (it) {
       var p=P(it.id), g=o.picked[it.id]||0, r=o.rejected[it.id]||0;
       var cls = g>=it.qty ? ' ok' : (r ? ' rej' : '');
-      return '<div class="pick'+cls+'"><img class="th" src="'+IMG+p.img+'" alt="" loading="lazy">' +
+      return '<div class="pick'+cls+'">' + thumb(p) +
         '<div class="bd"><div class="nm">'+esc(p.name)+' <span class="pill grey">×'+it.qty+'</span></div>' +
         '<div class="un"><b class="num">'+g+'</b> ok · <b class="num">'+r+'</b> rejected</div></div>' +
         '<div class="cnt"><button class="g" onclick="KA.pickPlus(\''+it.id+'\')" aria-label="Accept one">'+I('check')+'</button>' +

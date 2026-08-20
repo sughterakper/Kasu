@@ -21,6 +21,8 @@
   var DICT = {
 
     en: {
+      sealed:'Sealed', cat_fresh:'Fresh', cat_pantry:'Pantry',
+      fresh_note:'Photographed at the stall', sealed_note:'Comes sealed — not inspected',
       /* welcome + minimum spend */
       w_tagline:'Ten tomatoes. Ten good ones.',
       w_sub:'Market produce from Wuse, checked by hand and photographed before it leaves the stall.',
@@ -112,6 +114,8 @@
     },
 
     ig: {
+      sealed:'Emechiri', cat_fresh:'Ọhụrụ', cat_pantry:'Ụlọ nkwakọba',
+      fresh_note:'E sere ya foto n’ahịa', sealed_note:'Ọ bịara mechiri emechi — a nyochaghị ya',
       w_tagline:'Tomato iri. Iri ha dị mma.',
       w_sub:'Ihe ubi si Wuse, e ji aka nyochaa ma see foto tupu ọ hapụ ebe ahịa.',
       w_lang:'Họrọ asụsụ gị',
@@ -193,6 +197,8 @@
     },
 
     ha: {
+      sealed:'A rufe', cat_fresh:'Sabo', cat_pantry:'Kayan ajiya',
+      fresh_note:'An ɗauki hoto a shago', sealed_note:'Ya zo a rufe — ba a duba ba',
       w_tagline:'Tumatir goma. Goma masu kyau.',
       w_sub:'Kayan lambu daga Wuse, an duba da hannu an kuma ɗauki hoto kafin ya bar shago.',
       w_lang:'Zaɓi harshenka',
@@ -274,6 +280,8 @@
     },
 
     yo: {
+      sealed:'Tí a dì', cat_fresh:'Tuntun', cat_pantry:'Ilé ìtajà',
+      fresh_note:'A ya fọ́tò rẹ̀ ní ibùdó', sealed_note:'Ó dé ní dídì — a kò yẹ̀ ẹ́ wò',
       w_tagline:'Tòmátì mẹ́wàá. Mẹ́wàá tó dára.',
       w_sub:'Ọjà láti Wuse, a fi ọwọ́ yẹ̀ ẹ́ wò a sì ya fọ́tò rẹ̀ kí ó tó kúrò ní ibùdó.',
       w_lang:'Yan èdè rẹ',

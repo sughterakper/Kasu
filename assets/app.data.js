@@ -9,6 +9,8 @@ var KASU = {};
 
 KASU.CATS = [
   { id:'all',     key:'all' },
+  { id:'fresh',   key:'cat_fresh', group:true },   /* everything inspected */
+  { id:'pantry',  key:'cat_pantry', group:true },  /* everything sealed    */
   { id:'stew',    label:'Stew base' },
   { id:'greens',  label:'Soup greens' },
   { id:'veg',     label:'Vegetables' },
@@ -91,7 +93,75 @@ KASU.PRODUCTS = [
     syn:['stew kit','stew base kit','stew base','obe kit'] },
   { id:'greenskit', name:'Soup Greens Kit', unit:'ugu · efo · waterleaf · scent',   price:2300, img:'jollof.jpg', cat:'kits', delta:-3,
     why:'Greens all cheap together',
-    syn:['soup kit','greens kit','soup greens','vegetable kit'] }
+    syn:['soup kit','greens kit','soup greens','vegetable kit'] },
+
+  /* ---- Pantry: sealed and dry goods. -------------------------------------
+     These carry `sealed:true` and a glyph instead of a photograph, because
+     nobody inspects a sealed bag of salt — the freshness promise does not
+     apply to them and the interface should not pretend otherwise. It also
+     keeps us from illustrating our own listings with other companies'
+     packaging, which is what stock photos of branded groceries always are. */
+  { id:'rice',      name:'Rice',            unit:'5kg · long grain',       price:9500, sealed:true, glyph:'sack',   cat:'pantry', delta:2,
+    why:'Import levy nudged the price',
+    syn:['rice','shinkafa','osikapa','iresi','bag of rice'] },
+  { id:'beans',     name:'Beans',           unit:'per mudu · brown',       price:3200, sealed:true, glyph:'sack',   cat:'pantry', delta:-3,
+    why:'New harvest reaching Abuja',
+    syn:['beans','wake','agwa','ewa','brown beans'] },
+  { id:'garri',     name:'Garri',           unit:'per mudu · white',       price:1800, sealed:true, glyph:'sack',   cat:'pantry', delta:0,
+    why:'Steady all week',
+    syn:['garri','gari','eba','akpu','cassava flour'] },
+  { id:'semo',      name:'Semolina',        unit:'1kg pack',               price:2400, sealed:true, glyph:'sachet', cat:'pantry', delta:0,
+    why:'Steady all week',
+    syn:['semo','semolina','semovita','wheat meal'] },
+  { id:'salt',      name:'Salt',            unit:'1kg',                    price:700,  sealed:true, glyph:'salt',   cat:'pantry', delta:0,
+    why:'Steady all week',
+    syn:['salt','gishiri','nnu','iyo'] },
+  { id:'sugar',     name:'Sugar',           unit:'1kg · granulated',       price:2100, sealed:true, glyph:'sachet', cat:'pantry', delta:4,
+    why:'Refinery costs up this month',
+    syn:['sugar','sukari','shuga','suga','iyo dun'] },
+  { id:'cubes',     name:'Seasoning cubes', unit:'pack of 50',             price:1600, sealed:true, glyph:'sachet', cat:'pantry', delta:0,
+    why:'Steady all week',
+    syn:['seasoning','seasoning cubes','maggi','knorr','stock cubes','cube'] },
+  { id:'spicemix',  name:'Curry & thyme',   unit:'2 tins',                 price:1200, sealed:true, glyph:'sachet', cat:'pantry', delta:0,
+    why:'Steady all week',
+    syn:['curry','thyme','spice','spices','seasoning powder','kayan yaji'] },
+  { id:'crayfish',  name:'Ground crayfish', unit:'per rubber',             price:2600, sealed:true, glyph:'sack',   cat:'pantry', delta:6,
+    why:'Fewer boats out of Calabar',
+    syn:['crayfish','cray fish','ground crayfish','ede','oporo'] },
+  { id:'palmoil',   name:'Palm oil',        unit:'1 litre',                price:3400, sealed:true, glyph:'bottle', cat:'pantry', delta:9,
+    why:'Between pressings in the south-east',
+    syn:['palm oil','red oil','mmanu','epo pupa','manja'] },
+  { id:'vegoil',    name:'Vegetable oil',   unit:'2 litres',               price:5200, sealed:true, glyph:'bottle', cat:'pantry', delta:3,
+    why:'Tracking the palm oil market',
+    syn:['vegetable oil','groundnut oil','cooking oil','oil','mai'] },
+
+  { id:'tuna',      name:'Tinned tuna',     unit:'3 tins · in oil',        price:4200, sealed:true, glyph:'tin',    cat:'pantry', delta:0,
+    why:'Steady all week',
+    syn:['tuna','tinned tuna','canned tuna','sardine','sardines','titus'] },
+  { id:'paste',     name:'Tomato paste',    unit:'6 sachets',              price:1500, sealed:true, glyph:'sachet', cat:'pantry', delta:-6,
+    why:'Follows the fresh tomato board down',
+    syn:['tomato paste','paste','tin tomato','tomato tin','gino'] },
+  { id:'milkpow',   name:'Powdered milk',   unit:'400g tin',               price:5800, sealed:true, glyph:'tin',    cat:'pantry', delta:5,
+    why:'Import costs up',
+    syn:['milk','powdered milk','milk powder','peak','dano','madara','mmiri ara ehi'] },
+  { id:'malt',      name:'Malt drink mix',  unit:'20 sachets',             price:3600, sealed:true, glyph:'sachet', cat:'pantry', delta:0,
+    why:'Steady all week',
+    syn:['milo','malt','bournvita','ovaltine','chocolate drink','malt drink','koko'] },
+  { id:'noodles',   name:'Instant noodles', unit:'carton of 40',           price:8900, sealed:true, glyph:'noodle', cat:'pantry', delta:-2,
+    why:'Promo pricing from the mill',
+    syn:['noodles','indomie','instant noodles','noodle','taliya'] },
+  { id:'eggs',      name:'Eggs',            unit:'crate of 30',            price:5400, sealed:true, glyph:'egg',    cat:'pantry', delta:7,
+    why:'Feed costs pushing crates up',
+    syn:['eggs','egg','crate of eggs','akwa','eyin','kwai'] },
+  { id:'bread',     name:'Bread',           unit:'family loaf',            price:1400, sealed:true, glyph:'bread',  cat:'pantry', delta:0,
+    why:'Steady all week',
+    syn:['bread','loaf','burodi','achicha','gurasa'] },
+  { id:'softdrink', name:'Soft drinks',     unit:'crate of 12',            price:6800, sealed:true, glyph:'crate',  cat:'pantry', delta:0,
+    why:'Steady all week',
+    syn:['soft drink','soft drinks','minerals','coke','fanta','drinks','crate of drinks','lemi'] },
+  { id:'water',     name:'Bottled water',   unit:'pack of 12 · 75cl',      price:2200, sealed:true, glyph:'bottle', cat:'pantry', delta:0,
+    why:'Steady all week',
+    syn:['water','bottled water','pure water','ruwa','mmiri','omi'] }
 ];
 
 KASU.KITS = {
