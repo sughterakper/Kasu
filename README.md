@@ -5,38 +5,55 @@ Market produce, held to supermarket standard. Abuja.
 A static demo: a marketing site plus a three-role app (buyer, seller, admin).
 No framework, no build step, no dependencies to install.
 
-## Run it
+## Live
+
+<https://sughterakper.github.io/Kasu/>
+
+Published by GitHub Pages from `main`, repo root. That is why the site files sit
+at the top level rather than in a subfolder, and why `.nojekyll` is here — it
+stops Pages running the files through Jekyll.
+
+## Run it locally
 
 ```bash
 node serve.js
 ```
 
 Then open <http://localhost:5173>. Any static server works; `serve.js` is a
-30-line zero-dependency one that also sends `no-store` so edits show up on reload.
+zero-dependency one that sends `no-store` so edits show up on a plain reload.
 
 ## What's here
 
 ```
-website/
-  index.html        split hero, price board, inspection ledger, bento guarantee
-  market.html       the full 22-item list
-  weekly.html       the standing-order pitch
-  guarantee.html    the freshness mechanic, including what it does not cover
-  vendors.html      the two stalls and their weekly rejection scores
-  contact.html      reach us / request an item
-  app.html          the app — buyer, seller, admin
-  assets/
-    tokens.css      colour, type and motion tokens (single source of truth)
-    style.css       the marketing site
-    app.css         the app
-    icons.js        the SVG icon set + the Kasu mark
-    app.data.js     all demo data (products, vendors, ops numbers)
-    app.js          router + the three role UIs
-    site.js         scroll progress bar
-    gsap-scroll.js  scroll choreography
-    fonts/          Bricolage Grotesque + Inter, both variable, self-hosted
-    images/         28 stock photos, local
-serve.js
+index.html        split hero, price board, inspection ledger, bento guarantee
+market.html       the full 22-item list
+weekly.html       the standing-order pitch
+guarantee.html    the freshness mechanic, including what it does not cover
+vendors.html      the two stalls and their weekly rejection scores
+contact.html      reach us / request an item
+app.html          the app — buyer, seller, admin
+assets/
+  tokens.css      colour, type and motion tokens (single source of truth)
+  style.css       the marketing site
+  app.css         the app
+  icons.js        the SVG icon set + the Kasu mark
+  app.data.js     all demo data (products, vendors, ops numbers)
+  app.js          router + the three role UIs
+  site.js         scroll progress bar
+  gsap-scroll.js  scroll choreography
+  fonts/          Bricolage Grotesque + Inter, both variable, self-hosted
+  images/         28 stock photos, local
+.nojekyll         tells Pages to serve the files as-is
+serve.js          local dev server
+```
+
+## Publishing a change
+
+Edits are not live until they are pushed — Pages rebuilds on push, usually
+within a minute:
+
+```bash
+git add -A && git commit -m "your message" && git push
 ```
 
 ## The app

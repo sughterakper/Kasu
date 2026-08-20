@@ -4,8 +4,11 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = path.join(__dirname, 'website');
+/* The site lives at the repo root so GitHub Pages serves it from the bare URL,
+   which means this server has to refuse the repo's own plumbing. */
+const ROOT = __dirname;
 const PORT = process.env.PORT || 5173;
+const BLOCKED = /(^|[\\/])(\.git|\.claude|node_modules|serve\.js)([\\/]|$)/i;
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -17,8 +20,9 @@ const TYPES = {
 http.createServer((req, res) => {
   let p = decodeURIComponent(req.url.split('?')[0]);
   if (p === '/') p = '/index.html';
-  const file = path.join(ROOT, path.normalize(p).replace(/^([/\\])+/, ''));
-  if (!file.startsWith(ROOT)) { res.writeHead(403).end('forbidden'); return; }
+  const rel = path.normalize(p).replace(/^([/\\])+/, '');
+  const file = path.join(ROOT, rel);
+  if (!file.startsWith(ROOT) || BLOCKED.test(rel)) { res.writeHead(403).end('forbidden'); return; }
   fs.readFile(file, (err, buf) => {
     if (err) { res.writeHead(404, { 'Content-Type': 'text/plain' }).end('not found'); return; }
     res.writeHead(200, {
