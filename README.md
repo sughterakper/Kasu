@@ -1,17 +1,17 @@
-# Kasu — demo build
+# Kasu
 
 Market produce, held to supermarket standard. Abuja.
 
-A static demo: a marketing site plus a three-role app (buyer, seller, admin).
-No framework, no build step, no dependencies to install.
+An app demo — buyer, seller and admin — in English, Igbo, Hausa and Yoruba.
+No framework, no build step, nothing to install.
 
 ## Live
 
 <https://sughterakper.github.io/Kasu/>
 
-Published by GitHub Pages from `main`, repo root. That is why the site files sit
-at the top level rather than in a subfolder, and why `.nojekyll` is here — it
-stops Pages running the files through Jekyll.
+Published by GitHub Pages from `main`, repo root. That is why the app files sit
+at the top level, and why `.nojekyll` is here — it stops Pages running the files
+through Jekyll.
 
 ## Run it locally
 
@@ -19,86 +19,106 @@ stops Pages running the files through Jekyll.
 node serve.js
 ```
 
-Then open <http://localhost:5173>. Any static server works; `serve.js` is a
-zero-dependency one that sends `no-store` so edits show up on a plain reload.
+Then <http://localhost:5173>.
 
-## What's here
-
-```
-index.html        split hero, price board, inspection ledger, bento guarantee
-market.html       the full 22-item list
-weekly.html       the standing-order pitch
-guarantee.html    the freshness mechanic, including what it does not cover
-vendors.html      the two stalls and their weekly rejection scores
-contact.html      reach us / request an item
-app.html          the app — buyer, seller, admin
-assets/
-  tokens.css      colour, type and motion tokens (single source of truth)
-  style.css       the marketing site
-  app.css         the app
-  icons.js        the SVG icon set + the Kasu mark
-  app.data.js     all demo data (products, vendors, ops numbers)
-  app.js          router + the three role UIs
-  site.js         scroll progress bar
-  gsap-scroll.js  scroll choreography
-  fonts/          Bricolage Grotesque + Inter, both variable, self-hosted
-  images/         28 stock photos, local
-.nojekyll         tells Pages to serve the files as-is
-serve.js          local dev server
-```
-
-## Publishing a change
-
-Edits are not live until they are pushed — Pages rebuilds on push, usually
-within a minute:
+## Publish automatically
 
 ```bash
-git add -A && git commit -m "your message" && git push
+node watch.js
 ```
 
-## The app
+Watches the folder and, four seconds after you stop saving, commits and pushes —
+so the live site follows along. `node watch.js --dry-run` reports what it would
+do without touching git. Ctrl+C stops it; nothing is pushed while it is not
+running.
 
-Three roles at `app.html`, switchable from the demo bar at the bottom:
+## The three roles
 
-| Route | Role | What it shows |
+Switch with the bar at the bottom of the screen.
+
+| Route | Role | What it does |
 | --- | --- | --- |
-| `#/buy` | Buyer | Market, weekly basket, basket, checkout, live order ledger, streak + points |
-| `#/sell` | Seller | Tomorrow's demand board, live pick list, rejection scorecard, payouts |
-| `#/ops` | Admin | Orders/spoilage trends, vendor scorecard, flag queue, district coverage |
+| `#/buy` | Buyer | Market, price board, shopping list, basket, scheduled checkout, packages, order tracking, settings |
+| `#/sell` | Seller | The market vendor: tomorrow's demand, live pick list, rejection score, payouts |
+| `#/ops` | Admin | Orders and spoilage trends, vendor scorecard, flag queue, district coverage |
 
-**The three roles share one state**, which is the point of the demo:
+**They share one state**, which is the point:
 
 1. Buyer places an order → it appears on the seller's pick list.
 2. Seller accepts and rejects items, then taps *Attach photo & dispatch*.
-3. The buyer's inspection ledger updates with the real reject count on the receipt.
-4. Buyer flags an item → it lands in the admin flag queue, traced to that vendor.
+3. The buyer's inspection ledger updates with the real reject count.
+4. Buyer reports an item → it lands in the admin flag queue, traced to that vendor.
 
-State persists to `localStorage` under `kasu-demo-v2`. The **↺** button in the
-demo bar resets everything.
+State persists to `localStorage` under `kasu-demo-v3`. The **↺** button resets it.
+
+## Buyer features
+
+- **Price board** (`#/buy/prices`) — every item's move against last week's board,
+  grouped into falls, rises and held, each with the reason it moved.
+- **Shopping list** (`#/buy/list`) — type a list the way you would say it and it
+  is matched to the catalogue. Understands quantities as digits or as words in
+  all four languages, so `meji dodo` becomes Ripe plantain × 2. Unmatched lines
+  are shown rather than silently dropped.
+- **Scheduled delivery** — pick the day and a time window at checkout.
+- **Fixed packages** (`#/buy/packages`) — name it, pick the day and time, choose
+  the items; it repeats weekly at 9% off until stopped.
+- **Explicit payment approval** — the order button approves the debit; nothing
+  is taken before that.
+- **Language and text size** (`#/buy/me`) — four languages, three text sizes.
+
+### What is simulated
+
+The **photo** path on the shopping list does not do real image recognition —
+there is no backend. Choosing a photo runs a fixed sample list through the same
+parser, and the screen says so. The typed path is real: it parses whatever you
+write. Payment is a mock; no card details are collected anywhere.
+
+## Languages
+
+English, Igbo, Hausa, Yoruba — switchable from the Me screen, and it re-labels
+the whole interface including navigation and day names.
+
+**The Igbo, Hausa and Yoruba strings are a first pass and have not been reviewed
+by native speakers.** They are good enough to demo the feature and to show a
+translator what needs fixing; diacritics especially need checking. Do not put
+them in front of real customers until someone who speaks each language has been
+through `assets/i18n.js`.
+
+## Built for a wide range of users
+
+- Three text sizes; everything is sized in `rem`, so tap targets grow with the
+  text rather than staying small.
+- Every icon has a text label beside it — no icon-only controls.
+- Minimum 44px tap targets, visible focus rings, `prefers-reduced-motion`
+  respected.
+- Five tabs maximum, with settings gathered under one **Me** hub.
+
+## Files
+
+```
+index.html        the app
+assets/
+  tokens.css      colour, type and motion tokens (single source of truth)
+  app.css         all app styling, including the text-size scale
+  icons.js        the SVG icon set + the Kasu mark
+  i18n.js         the four languages
+  app.data.js     catalogue, search synonyms, seller and ops data
+  app.js          router + the three role UIs + the list parser
+  fonts/          Bricolage Grotesque + Inter, variable, self-hosted
+  images/         25 photos, local
+.nojekyll         tells Pages to serve the files as-is
+serve.js          local dev server
+watch.js          auto commit + push on save
+```
 
 ## Design system
-
-Deliberately its own thing, not a recolour of anything else:
 
 - **Foundation** is a green-leaning near-black (`--void #0E100C`) on warm ivory
   (`--ivory #F7F4ED`) — not black on white.
 - **Two accents, never interchangeable.** `--rust` means *an action you take*.
-  `--leaf` means *a fact Kasu has verified*. `--gold` is reserved for the
-  inspection stamp and nothing else.
-- **Type**: Bricolage Grotesque for display, Inter for everything else. Both are
-  self-hosted variable fonts — two files cover every weight. No serif display
-  anywhere; that is deliberately not the voice.
-- **Icons are SVG**, one family, 1.75 stroke, `currentColor`. Never emoji.
-- **Layout signatures**: `.split` (asymmetric hero), `.board` (prices with weekly
-  deltas), `.ledger` (timestamped inspection log), `.receipt` (perforated proof
-  card), `.bento` (uneven guarantee grid).
+  `--leaf` means *a fact Kasu has verified*. `--gold` is only the inspection stamp.
+- **Type**: Bricolage Grotesque for display, Inter for everything else. Both
+  self-hosted variable fonts — two files cover every weight.
+- **Icons are SVG.** Never emoji.
 
-## Notes on the content
-
-The numbers are invented but internally consistent, and the copy states the
-limits rather than hiding them — spoilage is priced in at 4–6%, the guarantee
-lists what it does *not* cover, and a dropped vendor is published on the
-vendors page. That is a deliberate positioning choice, not filler.
-
-Photos are from Unsplash and stored locally in `website/assets/images/`.
-Everything is sample data. Nothing is charged.
+All numbers are invented but internally consistent. Nothing is charged.
