@@ -1,16 +1,28 @@
 /* ============================================================
-   Kasu — design tokens + type system.
-   Shared by the marketing site (style.css) and the app (app.css).
+   Kasua — design tokens.
 
-   Identity notes, so nobody drifts:
-   · Foundation is a GREEN-leaning near-black on WARM ivory — not
-     black-on-white. Two accents, never interchangeable:
-       rust  = an action the user takes
-       leaf  = a fact Kasu has verified
-     gold is reserved exclusively for the inspection stamp.
-   · Display face is Bricolage Grotesque (chunky, contemporary).
-     No serif display anywhere — that is deliberately not our voice.
-   · Icons are SVG. Never emoji.
+   The scene this is designed for: a 58-year-old woman in Wuse,
+   Abuja, standing in her kitchen at 6:40am with hard equatorial
+   daylight coming through the window, deciding whether today's
+   tomato price is worth it before her day starts. Bright ambient
+   light, older eyes, a quick decision. That forces a light theme,
+   high contrast and generous type — not a mood choice.
+
+   Colour strategy: RESTRAINED. Tinted neutrals carry the surface;
+   colour appears only on actions and states, never as decoration.
+
+   Two accents, never interchangeable:
+     --act  an action the user takes
+     --ok   a fact Kasua has verified
+   --gold is the inspection stamp and nothing else.
+
+   Neutrals are tinted toward the brand's own green (chroma .005-.010),
+   deliberately NOT toward warm — a warm near-white would land straight
+   in cream/ivory territory, which is the generic default for this kind
+   of app.
+
+   Every foreground/background pair below was measured, not eyeballed.
+   Ratios in comments are WCAG on the surface named.
    ============================================================ */
 
 @font-face{
@@ -28,70 +40,94 @@
 
 :root{
   /* --- surfaces --- */
-  --void:#0E100C;        /* deep green-black */
-  --soil:#191C15;        /* raised dark surface */
-  --soil-2:#252A20;
-  --ivory:#F7F4ED;       /* warm paper */
-  --ivory-2:#EFEBE1;
-  --card:#FFFFFF;
-  --line:#E2DCCF;
-  --line-dk:rgba(255,255,255,.11);
+  --bg:oklch(0.977 0.005 155);        /* #f5f8f6  the app body            */
+  --surface:oklch(1 0 0);             /* #ffffff  cards and rows          */
+  --sunken:oklch(0.945 0.008 155);    /* #e9eeea  second neutral layer    */
+  --line:oklch(0.905 0.010 155);      /* #e2e8e4                          */
+  --line-strong:oklch(0.845 0.012 155);
 
-  /* --- text --- */
-  --ink:#14170F;
-  --ink-2:#5B6152;       /* muted, green-leaning */
-  --ink-3:#8A9080;
-  --on-dark:#EDEAE1;
-  --on-dark-2:#9AA08F;
+  /* --- dark surfaces: deep pine, not black. Warmer and more expensive
+         than a neutral near-black, and it belongs to the brand hue.  --- */
+  --deep:oklch(0.255 0.045 158);      /* #0d291a                          */
+  --deep-2:oklch(0.315 0.040 158);
+  --deep-3:oklch(0.375 0.034 158);
+  --line-on-deep:oklch(1 0 0 / .13);
 
-  /* --- accents: rust = you act, leaf = we verified --- */
-  --rust:#D2451E;
-  --rust-dk:#9C2F12;
-  --rust-tint:#FCEDE6;
-  --leaf:#2C6E43;
-  --leaf-dk:#1E4E2F;
-  --leaf-tint:#E3EFE5;
-  --gold:#D9A013;        /* stamp only */
-  --gold-tint:#FBF1DA;
-  --alert:#B3402C;
-  --alert-tint:#F8E6E1;
+  /* --- ink --- */
+  --ink:oklch(0.235 0.020 158);       /* #16211a  15.5:1 on bg            */
+  --ink-2:oklch(0.445 0.018 158);     /* #4c5750   7.1:1 on bg            */
+  --ink-3:oklch(0.545 0.016 158);     /* #69736d   4.6:1 on bg — AA, and
+                                          deliberately not lighter: light
+                                          grey "for elegance" is the main
+                                          reason interfaces read as cheap */
+  --on-deep:oklch(0.945 0.010 155);   /* 13.3:1 on --deep                 */
+  --on-deep-2:oklch(0.760 0.020 158); /*  7.3:1 on --deep                 */
 
-  /* --- shape + depth --- */
-  --r-sm:8px; --r:14px; --r-lg:22px; --r-xl:30px;
-  --sh-1:0 1px 2px rgba(20,23,15,.06);
-  --sh-2:0 6px 18px -6px rgba(20,23,15,.16);
-  --sh-3:0 24px 50px -18px rgba(20,23,15,.34);
+  /* --- accent: an action you take --- */
+  --act:oklch(0.552 0.165 34);        /* #bf4327  5.2:1 both directions   */
+  --act-press:oklch(0.470 0.150 34);  /* #9d2f16  7.4:1 under white       */
+  --act-tint:oklch(0.955 0.022 34);   /* #ffebe7                          */
 
-  /* --- motion (skill rule: 150-300ms micro, ease-out in) --- */
-  --t-fast:140ms cubic-bezier(.22,.61,.36,1);
-  --t:220ms cubic-bezier(.22,.61,.36,1);
-  --t-slow:380ms cubic-bezier(.22,.61,.36,1);
+  /* --- accent: a fact we verified --- */
+  --ok:oklch(0.505 0.105 158);        /* #1f764d  5.6:1 both directions   */
+  --ok-deep:oklch(0.400 0.095 158);   /* #005633  7.8:1 on --ok-tint      */
+  --ok-tint:oklch(0.955 0.028 158);   /* #e1f6e9                          */
 
-  /* --- type --- */
+  /* --- the inspection stamp, and nothing else --- */
+  --gold:oklch(0.700 0.115 82);       /* #c29741  on dark only            */
+  --gold-on-deep:oklch(0.780 0.110 82);/* 7.7:1 on --deep                 */
+  --gold-ink:oklch(0.470 0.090 76);   /* #775313  6.9:1 — gold TEXT on light */
+  --gold-tint:oklch(0.960 0.038 82);
+
+  /* --- states --- */
+  --bad:oklch(0.505 0.150 25);        /* #aa3836  6.3:1 under white       */
+  --bad-tint:oklch(0.955 0.025 25);
+  --warn:oklch(0.560 0.120 62);       /* #a56217  4.8:1 on surface        */
+  --warn-tint:oklch(0.960 0.030 70);
+
+  /* --- shape + depth: shadows tinted with the brand hue rather than
+         neutral black, which is what stops them looking muddy --- */
+  --r-sm:8px; --r:14px; --r-lg:20px; --r-xl:28px;
+  --sh-1:0 1px 2px oklch(0.255 0.045 158 / .07);
+  --sh-2:0 6px 16px -6px oklch(0.255 0.045 158 / .18);
+  --sh-3:0 24px 48px -18px oklch(0.255 0.045 158 / .34);
+
+  /* --- motion: product pace. 150-250ms; users are in a task --- */
+  --t-fast:130ms cubic-bezier(.22,1,.36,1);
+  --t:200ms cubic-bezier(.22,1,.36,1);
+  --t-slow:280ms cubic-bezier(.22,1,.36,1);
+
+  /* --- z-index: a named scale, never arbitrary numbers --- */
+  --z-sticky:10; --z-nav:20; --z-scrim:30; --z-sheet:40; --z-toast:50; --z-fly:60;
+
+  /* --- type. Bricolage is for headings and the wordmark only; data,
+         labels and buttons are Inter. Display faces in UI data is the
+         fastest way to make a product interface look amateur. --- */
   --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
   --f-body:"Inter",ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --f-num:"Inter",ui-sans-serif,system-ui,sans-serif;
 }
 
 *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
-/* Visible focus everywhere — never removed (a11y priority 1) */
+/* Focus is never removed. 3:1 against both the control and its background. */
 :where(a,button,input,select,textarea,[tabindex]):focus-visible{
-  outline:2.5px solid var(--rust); outline-offset:2px; border-radius:4px;
+  outline:2.5px solid var(--act); outline-offset:2px; border-radius:4px;
 }
 
-.display{ font-family:var(--f-display); font-weight:800; letter-spacing:-.035em; line-height:.98; }
-.num{ font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1; }
+/* Numbers are Inter with tabular figures and slightly tightened tracking:
+   prices need to line up column to column and never reflow as they change. */
+.num{ font-family:var(--f-num); font-variant-numeric:tabular-nums;
+  font-feature-settings:"tnum" 1; letter-spacing:-.012em; }
 
-/* the wordmark — a leaf counter-cut into the K, set tight */
-.wm{ font-family:var(--f-display); font-weight:800; letter-spacing:-.045em;
+.wm{ font-family:var(--f-display); font-weight:800; letter-spacing:-.04em;
   display:inline-flex; align-items:center; gap:.34em; line-height:1; }
-.wm .mark{ width:.92em; height:.92em; flex:none; }
+.wm .mark{ width:.95em; height:.95em; flex:none; }
 
-/* icons: one family, 1.75 stroke, currentColor (skill rule: no emoji) */
-.ico{ width:20px; height:20px; flex:none; display:block; stroke:currentColor;
+.ico{ width:1.25rem; height:1.25rem; flex:none; display:block; stroke:currentColor;
   fill:none; stroke-width:1.75; stroke-linecap:round; stroke-linejoin:round; }
-.ico.lg{ width:24px; height:24px; }
-.ico.sm{ width:16px; height:16px; stroke-width:2; }
+.ico.lg{ width:1.5rem; height:1.5rem; }
+.ico.sm{ width:1rem; height:1rem; stroke-width:2; }
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{ animation-duration:.01ms !important; animation-iteration-count:1 !important;

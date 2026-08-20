@@ -1,4 +1,4 @@
-# Kasu
+# Kasua
 
 Market produce, held to supermarket standard. Abuja.
 
@@ -49,10 +49,17 @@ Switch with the bar at the bottom of the screen.
 3. The buyer's inspection ledger updates with the real reject count.
 4. Buyer reports an item → it lands in the admin flag queue, traced to that vendor.
 
-State persists to `localStorage` under `kasu-demo-v3`. The **↺** button resets it.
+State persists to `localStorage` under `kasua-demo-v4`. The **↺** button resets it.
 
 ## Buyer features
 
+- **Welcome screen** — first run asks two things, language and district, both
+  already answered, so a single tap gets you in. Language comes first because
+  everything after it is unreadable to the wrong reader. Re-openable from Me.
+- **Minimum order of ₦5,000** — the basket shows how much more is needed, a
+  progress bar, and the actual reason (one rider, one run: a smaller basket
+  costs more to deliver than it earns). Checkout is guarded at the route as
+  well as the button, so the back button cannot slip past it.
 - **Price board** (`#/buy/prices`) — every item's move against last week's board,
   grouped into falls, rises and held, each with the reason it moved.
 - **Shopping list** (`#/buy/list`) — type a list the way you would say it and it
@@ -100,7 +107,7 @@ index.html        the app
 assets/
   tokens.css      colour, type and motion tokens (single source of truth)
   app.css         all app styling, including the text-size scale
-  icons.js        the SVG icon set + the Kasu mark
+  icons.js        the SVG icon set + the Kasua mark
   i18n.js         the four languages
   app.data.js     catalogue, search synonyms, seller and ops data
   app.js          router + the three role UIs + the list parser
@@ -113,12 +120,37 @@ watch.js          auto commit + push on save
 
 ## Design system
 
-- **Foundation** is a green-leaning near-black (`--void #0E100C`) on warm ivory
-  (`--ivory #F7F4ED`) — not black on white.
-- **Two accents, never interchangeable.** `--rust` means *an action you take*.
-  `--leaf` means *a fact Kasu has verified*. `--gold` is only the inspection stamp.
-- **Type**: Bricolage Grotesque for display, Inter for everything else. Both
-  self-hosted variable fonts — two files cover every weight.
+Defined once in `assets/tokens.css`, in OKLCH.
+
+**The scene it is designed for**: a 58-year-old woman in Wuse standing in her
+kitchen at 6:40am, hard daylight through the window, deciding whether today's
+tomato price is worth it before her day starts. Bright ambient light, older eyes,
+a quick decision. That is what forces a light theme and high contrast — not taste.
+
+- **Colour strategy is Restrained.** Tinted neutrals carry the surface; colour
+  appears on actions and states only, never as decoration. The welcome screen is
+  the single deliberate exception and goes fully committed to the brand green.
+- **Surfaces are tinted toward the brand's own green** at very low chroma
+  (`--bg` #f5f8f6), deliberately *not* warm. A warm near-white lands straight in
+  the cream/ivory territory that every produce app already occupies.
+- **Dark surfaces are deep pine** (`--deep` #0d291a), not near-black. Warmer,
+  more expensive, and it belongs to the brand rather than to nothing.
+- **Two accents, never interchangeable.** `--act` (#bf4327) means *an action you
+  take*. `--ok` (#1f764d) means *a fact Kasua has verified*. `--gold` is the
+  inspection stamp and nothing else.
+- **Type**: Bricolage Grotesque for the wordmark, headings and product names
+  only. Every label, button, price and figure is Inter with tabular numerals.
+  Display faces in UI data is the fastest way to make a product look amateur.
 - **Icons are SVG.** Never emoji.
+- **No blanket entrance animation.** The app opens into a task; motion is
+  reserved for things that actually changed.
+
+### Measured, not eyeballed
+
+Every foreground/background pair was checked against what actually renders. An
+automated pass over **644 text nodes across 17 routes** reports zero WCAG AA
+failures, no horizontal overflow at 320px, and no tap target under 44px. Where a
+control reads smaller than 44px (the add button, the switch), the visual size is
+kept and the hit area is extended with a pseudo-element.
 
 All numbers are invented but internally consistent. Nothing is charged.

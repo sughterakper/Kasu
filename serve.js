@@ -1,4 +1,4 @@
-/* Tiny static server for the Kasu demo — no dependencies.
+/* Tiny static server for the Kasua demo — no dependencies.
    Run:  node serve.js        then open http://localhost:5173 */
 const http = require('http');
 const fs = require('fs');
@@ -32,4 +32,4 @@ http.createServer((req, res) => {
     });
     res.end(buf);
   });
-}).listen(PORT, () => console.log(`Kasu demo running at http://localhost:${PORT}`));
+}).listen(PORT, () => console.log(`Kasua demo running at http://localhost:${PORT}`));

@@ -1,4 +1,4 @@
-/* Kasu — demo data. Prices in naira, units the way Abuja markets actually sell.
+/* Kasua — demo data. Prices in naira, units the way Abuja markets actually sell.
  *
  * `syn` matters more than it looks: it is what the shopping-list parser matches
  * against, so it carries the English, Igbo, Hausa and Yoruba names for each item
@@ -135,7 +135,7 @@ KASU.PHOTO_DEMO = 'tomato basket 2\nugu 1\nrodo\nonions 1\ncatfish 2kg';
 KASU.SELLER = {
   name:'Ngozi Adeyemi',
   stall:'Stall 4 · Wuse Market',
-  since:'14 months with Kasu',
+  since:'14 months with Kasua',
   covers:['tombasket','tomloose','tatashe','rodo','onion'],
   rejectWeek:6,
   rejectSeries:[11,9,12,8,7,9,6,8,5,7,6,6],

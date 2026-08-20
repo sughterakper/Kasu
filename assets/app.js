@@ -1,4 +1,4 @@
-/* Kasu — the app. Hash-routed, no build step, no dependencies.
+/* Kasua — the app. Hash-routed, no build step, no dependencies.
    Three roles share one state so the demo actually hangs together:
      #/buy/*   buyer   — market, price board, shopping list, packages, orders
      #/sell/*  seller  — the market vendor: demand, pickups, score, payouts
@@ -8,7 +8,10 @@
 
   var IMG = 'assets/images/';
   var FEE = 800;
-  var STORE = 'kasu-demo-v3';
+  /* One rider, one run: below this a basket costs more to deliver than it earns.
+     Stated to the buyer in those words rather than hidden until checkout. */
+  var MIN_SPEND = 5000;
+  var STORE = 'kasua-demo-v4';
   var I = KI.icon, MARK = KI.mark, t = KL.t;
 
   /* ---------------- state ---------------- */
@@ -24,7 +27,8 @@
       accepted:{},
       lastBasket:['tombasket','tatashe','rodo','onion'],
       listText:'', listResult:null,
-      scale:'md'
+      scale:'md',
+      seen:false                         // has the welcome screen been completed
     };
   }
   function load() {
@@ -51,6 +55,13 @@
   function cartCount() { var n=0; for (var k in S.cart) n+=S.cart[k]; return n; }
   function cartTotal() { var x=0; for (var k in S.cart) x+=P(k).price*S.cart[k]; return x; }
   function pointsFor(x) { return Math.round(x/100); }
+  function shortfall() { return Math.max(0, MIN_SPEND - cartTotal()); }
+  function meetsMin() { return cartTotal() >= MIN_SPEND; }
+  /* i18n strings carry {X} / {MIN} placeholders so word order stays natural
+     in each language instead of being concatenated in English order. */
+  function fill(key, vals) {
+    return String(t(key)).replace(/\{(\w+)\}/g, function (_, k) { return vals[k] != null ? vals[k] : ''; });
+  }
   function dayLabel(id) {
     for (var i=0;i<KASU.DAYS.length;i++) if (KASU.DAYS[i].id===id) return KASU.DAYS[i][KL.getLang()] || KASU.DAYS[i].en;
     return id;
@@ -147,7 +158,9 @@
   A.schedDay = function (d) { S.sched.day=d; save(); render(); };
   A.schedSlot = function (s) { S.sched.slot=s; save(); render(); };
 
-  A.lang = function (id) { KL.setLang(id); save(); render(); toast(KL.t('language') + ': ' + id.toUpperCase()); };
+  A.lang = function (id) { KL.setLang(id); save(); render(); };
+  A.enter = function () { S.seen = true; save(); location.hash = '#/buy/market'; render(); };
+  A.showWelcome = function () { S.seen = false; save(); location.hash = '#/welcome'; render(); };
   A.scale = function (s) { S.scale=s; applyScale(); save(); render(); };
 
   A.reorder = function () {
@@ -263,7 +276,7 @@
     var n = cartCount();
     return '<div class="bar"><div class="barrow">' +
       '<div style="flex:1;min-width:0">' +
-        '<div class="wm">' + MARK() + 'Kasu</div>' +
+        '<div class="wm">' + MARK() + 'Kasua</div>' +
         '<div class="loc">' + I('pin') + esc(S.district) + ' · ' + t('delivering_to') + '</div>' +
       '</div>' +
       '<a class="iconbtn" href="#/buy/basket" aria-label="' + t('nav_basket') + '">' + I('basket') +
@@ -321,6 +334,35 @@
   }
 
   /* ============================================================
+     WELCOME — first run. Two decisions, both already answered, so
+     the fast path in is a single tap. Language comes first because
+     everything after it is unreadable to the wrong reader.
+     ============================================================ */
+  function screenWelcome() {
+    return '<div class="welcome">' +
+      '<div class="top"><div class="wm">' + MARK() + 'Kasua</div>' +
+      '<h1>' + t('w_tagline') + '</h1>' +
+      '<p class="sub">' + t('w_sub') + '</p></div>' +
+
+      '<div class="grp"><div class="lbl">' + t('w_lang') + '</div>' +
+      '<div class="wlang">' + KL.LANGS.map(function (L) {
+        var on = KL.getLang() === L.id;
+        return '<button aria-pressed="' + on + '" onclick="KA.lang(\'' + L.id + '\')">' +
+          '<span>' + esc(L.native) + '</span>' + I('check') + '</button>';
+      }).join('') + '</div></div>' +
+
+      '<div class="grp"><div class="lbl">' + t('w_where') + '</div>' +
+      '<div class="wdist">' + KASU.DISTRICTS.map(function (d) {
+        var on = S.district === d;
+        return '<button aria-pressed="' + on + '" onclick="KA.district(\'' + d + '\')">' + esc(d) + '</button>';
+      }).join('') + '</div></div>' +
+
+      '<div class="foot"><button class="btn" onclick="KA.enter()">' + t('w_start') + I('right') + '</button>' +
+      '<p class="note">' + t('w_change') + '</p></div>' +
+      '</div>';
+  }
+
+  /* ============================================================
      BUYER — market
      ============================================================ */
   function pcard(p) {
@@ -360,7 +402,7 @@
     }
 
     h += '<a class="promo" href="#/buy/packages"><img src="'+IMG+'basketBox.jpg" alt=""><span class="sh"></span>' +
-      '<div class="in"><div class="eye">'+t('promo_eyebrow')+'</div>' +
+      '<div class="in"><div class="lbl">'+t('promo_eyebrow')+'</div>' +
       '<h3>'+t('promo_title')+'</h3><p>'+t('promo_sub')+'</p>' +
       '<span class="go">'+t('promo_cta')+' '+I('right')+'</span></div></a>';
 
@@ -370,7 +412,7 @@
 
     h += '<div class="sect"><h3>'+esc(S.cat==='all' ? t('todays_market') : catLabel(label))+'</h3>' +
          '<span class="m">'+list.length+' '+t('items')+'</span></div>';
-    h += '<div class="grid stag">' + list.map(pcard).join('') + '</div>';
+    h += '<div class="grid">' + list.map(pcard).join('') + '</div>';
 
     return shell(h, 'buy', 'market', topbar());
   }
@@ -406,7 +448,7 @@
     h += '<div class="sect"><h3>'+t('price_held')+'</h3></div>';
     h += flat.map(priceRow).join('');
 
-    h += '<div class="panel"><div class="eye">'+t('why_moved')+'</div>' +
+    h += '<div class="panel"><div class="lbl">'+t('why_moved')+'</div>' +
       '<p class="tiny mut" style="margin:.35rem 0 0">Prices come from what the checker actually paid at the stall that morning, ' +
       'not a markup on a list. When the market moves, this board moves with it — up as well as down.</p></div>';
 
@@ -421,7 +463,7 @@
     h += '<p class="pad tiny mut" style="margin:.1rem 0 0">'+t('list_intro')+'</p>';
 
     h += '<div class="listbox">' +
-      '<label for="lst" class="eye" style="display:block;margin-bottom:.4rem">'+t('list_type')+'</label>' +
+      '<label for="lst" class="lbl" style="display:block;margin-bottom:.4rem">'+t('list_type')+'</label>' +
       '<textarea id="lst" oninput="KA.listInput(this)" placeholder="'+t('list_ph')+'">'+esc(S.listText)+'</textarea>' +
       '<div class="listways">' +
         '<button class="way" onclick="KA.listBuild()">'+I('check','lg')+'<span>'+t('list_build')+'</span></button>' +
@@ -440,7 +482,7 @@
       var r = S.listResult;
       if (r.found.length) {
         h += '<div class="sect"><h3>'+t('list_found')+'</h3><span class="m">'+r.found.length+'</span></div>';
-        h += '<div class="stag">' + r.found.map(function (m) {
+        h += '<div>' + r.found.map(function (m) {
           var p = P(m.id);
           return '<div class="match"><img src="'+IMG+p.img+'" alt="" loading="lazy">' +
             '<div class="bd"><div class="nm" style="font-weight:700">'+esc(p.name)+' × '+m.qty+'</div>' +
@@ -479,7 +521,7 @@
       return shell(h, 'buy', 'basket', '');
     }
 
-    h += '<div class="stag">' + ids.map(function (id) {
+    h += '<div>' + ids.map(function (id) {
       var p = P(id);
       return '<div class="row"><img class="th" src="'+IMG+p.img+'" alt="" loading="lazy">' +
         '<div class="bd"><div class="nm">'+esc(p.name)+'</div>' +
@@ -496,6 +538,23 @@
       '<div class="kv" style="border:0;padding-top:.5rem"><span class="note">'+t('earns')+'</span>' +
       '<span class="pill gold">'+I('star')+'+'+pointsFor(cartTotal()+FEE)+'</span></div></div>';
 
+    /* Below the minimum: say how much is missing and why, and show progress —
+       not a dead button the shopper has to work out for themselves. */
+    if (!meetsMin()) {
+      var pct = Math.round(cartTotal() / MIN_SPEND * 100);
+      h += '<div class="minbar">' + I('alert','lg') +
+        '<div style="flex:1;min-width:0">' +
+        '<b>' + fill('min_short', { X: fmt(shortfall()) }) + '</b>' +
+        '<small>' + fill('min_note', { MIN: fmt(MIN_SPEND) }) + '</small>' +
+        '<div class="progress"><i style="width:' + pct + '%"></i></div>' +
+        '</div></div>';
+      h += '<div class="sticky"><button class="btn" disabled aria-disabled="true">' +
+        t('checkout') + ' · <span class="num">' + fmt(MIN_SPEND) + '</span> ' + t('min_title').toLowerCase() + '</button>' +
+        '<p class="note" style="text-align:center;margin-top:.45rem">' +
+        '<a href="#/buy/market" style="text-decoration:underline">' + t('browse') + '</a></p></div>';
+      return shell(h, 'buy', 'basket', '');
+    }
+
     h += '<div class="sticky"><a class="btn" href="#/buy/checkout">'+t('checkout')+' · <span class="num">'+fmt(cartTotal()+FEE)+'</span></a></div>';
     return shell(h, 'buy', 'basket', '');
   }
@@ -504,11 +563,11 @@
     var days = [{id:'today',lab:t('today')},{id:'tomorrow',lab:t('tomorrow')}]
       .concat(KASU.DAYS.slice(0,4).map(function(d){ return {id:d.id, lab:dayLabel(d.id)}; }));
 
-    var h = '<div class="panel"><div class="eye" style="margin-bottom:.5rem">'+t('when')+'</div>' +
+    var h = '<div class="panel"><div class="lbl" style="margin-bottom:.5rem">'+t('when')+'</div>' +
       '<div class="dayrow">' + days.map(function (d) {
         return '<button class="daybtn'+(S.sched.day===d.id?' on':'')+'" onclick="KA.schedDay(\''+d.id+'\')">'+esc(d.lab)+'</button>';
       }).join('') + '</div>' +
-      '<div class="eye" style="margin:.9rem 0 .5rem">'+t('pick_time')+'</div>' +
+      '<div class="lbl" style="margin:.9rem 0 .5rem">'+t('pick_time')+'</div>' +
       KASU.SLOTS.map(function (s) {
         return '<button class="slot'+(S.sched.slot===s.id?' on':'')+'" onclick="KA.schedSlot(\''+s.id+'\')">' +
           '<span class="rd"></span>'+I('clock')+
@@ -524,18 +583,20 @@
   }
 
   function screenCheckout() {
-    if (!Object.keys(S.cart).length) { location.hash='#/buy/basket'; return ''; }
+    /* Guard the route as well as the button: the basket can drop below the
+       minimum with the back button, and checkout must not be reachable then. */
+    if (!Object.keys(S.cart).length || !meetsMin()) { location.hash='#/buy/basket'; return ''; }
     var total = cartTotal() + FEE;
     var h = head(t('checkout'), 'buy/basket');
 
-    h += '<div class="panel"><div class="eye">'+t('deliver_to')+'</div>' +
+    h += '<div class="panel"><div class="lbl">'+t('deliver_to')+'</div>' +
       '<div class="chips" style="padding:.5rem 0 0;margin:0">' + KASU.DISTRICTS.map(function(d){
         return '<button class="chip'+(S.district===d?' on':'')+'" onclick="KA.district(\''+d+'\')">'+d+'</button>';
       }).join('') + '</div></div>';
 
     h += scheduleBlock();
 
-    h += '<div class="panel"><div class="eye" style="margin-bottom:.5rem">'+t('payment')+'</div>' +
+    h += '<div class="panel"><div class="lbl" style="margin-bottom:.5rem">'+t('payment')+'</div>' +
       [['card','receipt',t('pay_card'),t('pay_card_sub')],
        ['transfer','wallet',t('pay_transfer'),t('pay_transfer_sub')],
        ['cod','store',t('pay_cash'),t('pay_cash_sub')]].map(function(o){
@@ -577,24 +638,24 @@
       var raw = S.pkg.items.reduce(function(a,id){ return a+P(id).price; },0);
       h += '<div class="panel dark"><div class="eye" style="color:var(--gold)">'+t('pkg_active')+'</div>' +
         '<h3 style="margin:.2rem 0 .1rem">'+esc(S.pkg.name)+'</h3>' +
-        '<p class="tiny" style="color:var(--on-dark-2);margin:0 0 .3rem">' +
+        '<p class="tiny" style="color:var(--on-deep-2);margin:0 0 .3rem">' +
           t('pkg_every')+' '+esc(dayLabel(S.pkg.day))+' '+t('pkg_at')+' '+t(slotOf(S.pkg.slot).key) +
           ' ('+t(slotOf(S.pkg.slot).timeKey)+')</p>' +
-        '<p class="tiny" style="color:var(--on-dark-2);margin:0 0 .7rem">' +
+        '<p class="tiny" style="color:var(--on-deep-2);margin:0 0 .7rem">' +
           S.pkg.items.length+' '+t('items')+' · <b class="num">'+fmt(raw*0.91+FEE)+'</b> / '+t('week')+'</p>' +
         '<button class="btn ghost" style="color:#fff;border-color:rgba(255,255,255,.4)" onclick="KA.pkgStop()">'+t('pkg_stop')+'</button></div>';
     }
 
     h += '<div class="sect"><h3>'+t('pkg_build')+'</h3></div>';
 
-    h += '<div class="panel"><label for="pkgn" class="eye" style="display:block;margin-bottom:.4rem">'+t('pkg_name')+'</label>' +
+    h += '<div class="panel"><label for="pkgn" class="lbl" style="display:block;margin-bottom:.4rem">'+t('pkg_name')+'</label>' +
       '<input id="pkgn" value="'+esc(d.name)+'" oninput="KA.pkgName(this)" placeholder="'+t('pkg_name_ph')+'"></div>';
 
-    h += '<div class="panel"><div class="eye" style="margin-bottom:.5rem">'+t('pkg_day')+'</div>' +
+    h += '<div class="panel"><div class="lbl" style="margin-bottom:.5rem">'+t('pkg_day')+'</div>' +
       '<div class="dayrow">' + KASU.DAYS.map(function (x) {
         return '<button class="daybtn'+(d.day===x.id?' on':'')+'" onclick="KA.pkgField(\'day\',\''+x.id+'\')">'+esc(dayLabel(x.id))+'</button>';
       }).join('') + '</div>' +
-      '<div class="eye" style="margin:.9rem 0 .5rem">'+t('pkg_time')+'</div>' +
+      '<div class="lbl" style="margin:.9rem 0 .5rem">'+t('pkg_time')+'</div>' +
       KASU.SLOTS.map(function (s) {
         return '<button class="slot'+(d.slot===s.id?' on':'')+'" onclick="KA.pkgField(\'slot\',\''+s.id+'\')">' +
           '<span class="rd"></span>'+I('clock')+
@@ -621,7 +682,7 @@
       var disc = Math.round(r2*0.91);
       h += '<div class="panel">' +
         '<div class="kv"><span>'+d.items.length+' '+t('items')+'</span><b class="num">'+fmt(r2)+'</b></div>' +
-        '<div class="kv"><span>-9%</span><b class="num" style="color:var(--leaf)">−'+fmt(r2-disc)+'</b></div>' +
+        '<div class="kv"><span>-9%</span><b class="num" style="color:var(--ok)">−'+fmt(r2-disc)+'</b></div>' +
         '<div class="kv"><span>'+t('delivery')+'</span><b class="num">'+fmt(FEE)+'</b></div>' +
         '<div class="kv tot"><span>'+t('week')+'</span><span class="num">'+fmt(disc+FEE)+'</span></div></div>';
       h += '<div class="sticky"><button class="btn" onclick="KA.pkgStart()">'+I('weekly')+t('pkg_start')+'</button>' +
@@ -695,7 +756,7 @@
         '<a class="call" href="tel:08000000000" aria-label="'+t('call_rider')+'">'+I('phone')+'</a></div>';
     }
 
-    h += '<div class="panel"><div class="eye" style="margin-bottom:.35rem">'+t('in_this_order')+'</div>' +
+    h += '<div class="panel"><div class="lbl" style="margin-bottom:.35rem">'+t('in_this_order')+'</div>' +
       o.items.map(function(it){ var p=P(it.id);
         return '<div class="kv"><span>'+esc(p.name)+' × '+it.qty+'</span><b class="num">'+fmt(p.price*it.qty)+'</b></div>';
       }).join('') +
@@ -764,6 +825,10 @@
         ? esc(S.pkg.name)+' · '+t('pkg_every')+' '+esc(dayLabel(S.pkg.day))
         : t('pkg_none'))+'</div></span>'+I('right')+'</a>';
 
+    h += '<button class="panel" style="display:flex;align-items:center;gap:.7rem;width:calc(100% - 2rem);text-align:left" onclick="KA.showWelcome()">' +
+      I('refresh','lg')+'<span style="flex:1"><b style="font-size:.92rem">'+t('w_lang')+'</b>' +
+      '<div class="note">'+t('w_change')+'</div></span>'+I('right')+'</button>';
+
     h += '<div class="sect"><h3>'+t('guarantee')+'</h3></div>';
     h += '<div class="panel" style="padding:0;overflow:hidden">' +
       '<img src="'+IMG+'qualityHands.jpg" alt="A checker weighing tomatoes by hand at the stall" ' +
@@ -802,11 +867,11 @@
       '<img src="'+IMG+'vendor.jpg" alt="The stall at Wuse Market" style="width:100%;height:7rem;object-fit:cover" loading="lazy"></div>';
 
     h += '<div class="panel rust"><b style="font-size:.92rem">Why this screen exists</b>' +
-      '<p class="tiny mut" style="margin:.25rem 0 0">Kasu tells you what it needs <b>before</b> the market opens, so you can hold back your best stock instead of putting it on the front table. ' +
+      '<p class="tiny mut" style="margin:.25rem 0 0">Kasua tells you what it needs <b>before</b> the market opens, so you can hold back your best stock instead of putting it on the front table. ' +
       'You get certainty, we get first pick.</p></div>';
 
     h += '<div class="sect"><h3>Confirm what you can supply</h3><span class="m">'+accepted+'/'+V.demand.length+'</span></div>';
-    h += '<div class="stag">' + V.demand.map(function (d) {
+    h += '<div>' + V.demand.map(function (d) {
       var p = P(d.id), on = !!S.accepted[d.id];
       return '<div class="row"><img class="th" src="'+IMG+p.img+'" alt="" loading="lazy">' +
         '<div class="bd"><div class="nm">'+esc(p.name)+'</div>' +
@@ -851,7 +916,7 @@
         '<button class="r" onclick="KA.rejectPlus(\''+it.id+'\')" aria-label="Reject one">'+I('x')+'</button></div></div>';
     }).join('');
 
-    h += '<div class="panel"><div class="eye">The rule</div>' +
+    h += '<div class="panel"><div class="lbl">The rule</div>' +
       '<p class="tiny mut" style="margin:.3rem 0 0">Never hand over a pre-packed bag. Every item is picked in front of the checker, rejects pulled before payment, ' +
       'the basket photographed, then it goes.</p></div>';
 
@@ -871,7 +936,7 @@
       '<div class="kpi leaf"><div class="l">Rank</div><div class="v num">#'+V.rank+'</div>' +
       '<div class="dl good">first pick on new lines</div></div></div>';
 
-    h += '<div class="panel"><div class="eye">Rejection rate · '+t('last_12')+'</div>' +
+    h += '<div class="panel"><div class="lbl">Rejection rate · '+t('last_12')+'</div>' +
       '<div class="spark" role="img" aria-label="Rejection rate fell from 11% to 6%">' +
       series.map(function (v) {
         return '<i class="'+(v>=15?'bad':v>=9?'warn':'hi')+'" style="height:'+Math.round(v/max*100)+'%"></i>';
@@ -910,7 +975,7 @@
 
     h += '<div class="panel dark"><div class="eye" style="color:var(--gold)">The trade, plainly</div>' +
       '<h3 style="margin:.2rem 0">Certainty, for first pick</h3>' +
-      '<p class="tiny" style="color:var(--on-dark-2);margin:0">You know Wednesday’s volume on Monday and get paid twice a week without chasing. ' +
+      '<p class="tiny" style="color:var(--on-deep-2);margin:0">You know Wednesday’s volume on Monday and get paid twice a week without chasing. ' +
       'In exchange the checker picks every item and refuses what does not pass. Nobody pretends that costs you nothing.</p></div>';
 
     return shell(h, 'sell', 'payouts', sellerBar('Paid twice weekly'));
@@ -920,7 +985,7 @@
      ADMIN
      ============================================================ */
   function opsBar(sub) {
-    return '<div class="opsbar">'+I('grid')+'<span class="r">Kasu Ops</span>' +
+    return '<div class="opsbar">'+I('grid')+'<span class="r">Kasua Ops</span>' +
       '<span class="w">Abuja · week 33<br>'+esc(sub||'live')+'</span></div>';
   }
   function sparkline(series, invert) {
@@ -938,10 +1003,10 @@
       '<div class="kpi bad"><div class="l">Spoilage cost</div><div class="v num">5.2%</div><div class="dl good">'+I('down')+'from 7.8%</div></div>' +
       '<div class="kpi gold"><div class="l">Flags to settle</div><div class="v num">'+open+'</div></div></div>';
 
-    h += '<div class="panel"><div class="eye">Orders per week · '+t('last_12')+'</div>' + sparkline(KASU.ORDERS_SERIES) +
+    h += '<div class="panel"><div class="lbl">Orders per week · '+t('last_12')+'</div>' + sparkline(KASU.ORDERS_SERIES) +
       '<div style="display:flex;justify-content:space-between" class="note"><span>18</span><span>41</span></div></div>';
 
-    h += '<div class="panel"><div class="eye">Spoilage as % of spend · '+t('last_12')+'</div>' + sparkline(KASU.SPOIL_SERIES, true) +
+    h += '<div class="panel"><div class="lbl">Spoilage as % of spend · '+t('last_12')+'</div>' + sparkline(KASU.SPOIL_SERIES, true) +
       '<div style="display:flex;justify-content:space-between" class="note"><span>7.8%</span><span>5.2%</span></div>' +
       '<p class="tiny mut" style="margin:.55rem 0 0">Priced into margin, not wished away. A model that assumes zero spoilage fails its first bad week.</p></div>';
 
@@ -958,7 +1023,7 @@
   }
 
   function screenOpsVendors() {
-    var h = '<div class="panel"><div class="eye">The only score that matters</div>' +
+    var h = '<div class="panel"><div class="lbl">The only score that matters</div>' +
       '<p class="tiny mut" style="margin:.3rem 0 0">Rejection rate is the share of stock refused at the stall. Low is good.</p></div>';
     h += '<div class="sect"><h3>Vendor scorecard</h3></div>';
     h += '<div class="panel"><table class="tbl"><thead><tr><th>Stall</th><th>Week</th><th>13-wk</th><th>Flags</th></tr></thead><tbody>' +
@@ -985,9 +1050,9 @@
         '<div class="un">#'+esc(f.id)+' · '+esc(f.why)+' · '+esc(f.vendor)+'</div></div>' +
         '<span class="pill '+tone+'">'+esc(f.st)+'</span></div>';
     }).join('');
-    h += '<div class="panel"><div class="eye">Where the cost lands</div>' +
+    h += '<div class="panel"><div class="lbl">Where the cost lands</div>' +
       [['Rejected at the stall','The vendor absorbs it. That is what being on the list costs.'],
-       ['Missed by the checker','Kasu absorbs it, and it is logged against the checker.'],
+       ['Missed by the checker','Kasua absorbs it, and it is logged against the checker.'],
        ['Never the customer','If they have to inspect it, we already failed at the thing they paid for.']]
       .map(function (r) {
         return '<div style="display:flex;gap:.6rem;padding:.5rem 0;border-bottom:1px solid var(--line)">' +
@@ -999,7 +1064,7 @@
 
   function screenOpsZones() {
     var max = Math.max.apply(null, KASU.ZONES.map(function(z){ return z.orders; }));
-    var h = '<div class="panel"><div class="eye">Orders by district · this week</div>' +
+    var h = '<div class="panel"><div class="lbl">Orders by district · this week</div>' +
       '<table class="tbl" style="margin-top:.4rem"><thead><tr><th>District</th><th>Orders</th><th>Weekly</th></tr></thead><tbody>' +
       KASU.ZONES.map(function (z) {
         return '<tr><td><b>'+esc(z.d)+'</b><div class="bar2"><i style="width:'+Math.round(z.orders/max*100)+'%"></i></div></td>' +
@@ -1009,13 +1074,14 @@
       '<p class="tiny mut" style="margin:.25rem 0 0">Three orders a week does not cover a rider on that route. Either it clusters to eight by week 36 or it comes off the map.</p></div>';
     h += '<div class="panel dark"><div class="eye" style="color:var(--gold)">Honest constraint</div>' +
       '<h3 style="margin:.2rem 0">One checker, one market</h3>' +
-      '<p class="tiny" style="color:var(--on-dark-2);margin:0">Every number here rests on one person being at Wuse Market at 06:15. ' +
+      '<p class="tiny" style="color:var(--on-deep-2);margin:0">Every number here rests on one person being at Wuse Market at 06:15. ' +
       'A second checker is the real unlock for a sixth district — not more app features.</p></div>';
     return shell(h, 'ops', 'zones', opsBar('coverage'));
   }
 
   /* ---------------- router ---------------- */
   var R = {
+    'welcome':screenWelcome,
     'buy/market':screenMarket, 'buy/prices':screenPrices, 'buy/list':screenList,
     'buy/basket':screenBasket, 'buy/checkout':screenCheckout, 'buy/packages':screenPackages,
     'buy/orders':screenOrders, 'buy/track':screenTrack, 'buy/me':screenMe,
@@ -1028,9 +1094,13 @@
 
   function route() {
     var r = (location.hash || '').replace(/^#\/?/, '');
+    /* First run lands on welcome whatever the URL says — but only for the
+       buyer. Someone opening the seller or admin view is not a new shopper
+       and should not be asked to pick a delivery district. */
+    if (!S.seen && (r === '' || r === 'welcome' || r.indexOf('buy') === 0)) return 'welcome';
     if (R[r]) return r;
     if (HOME[r]) return HOME[r];
-    return 'buy/market';
+    return S.seen ? 'buy/market' : 'welcome';
   }
 
   function render() {

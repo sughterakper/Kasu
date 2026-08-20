@@ -1,4 +1,4 @@
-/* Kasu — language layer. English · Igbo · Hausa · Yoruba.
+/* Kasua — language layer. English · Igbo · Hausa · Yoruba.
  *
  * IMPORTANT, and stated plainly: the Igbo, Hausa and Yoruba strings below are a
  * best-effort first pass. They are good enough to demo the feature and to show a
@@ -21,6 +21,16 @@
   var DICT = {
 
     en: {
+      /* welcome + minimum spend */
+      w_tagline:'Ten tomatoes. Ten good ones.',
+      w_sub:'Market produce from Wuse, checked by hand and photographed before it leaves the stall.',
+      w_lang:'Choose your language',
+      w_where:'Where should we deliver?',
+      w_start:'Start shopping',
+      w_change:'You can change both later',
+      min_title:'Minimum order',
+      min_short:'Add {X} more to check out',
+      min_note:'Orders start at {MIN}. One rider, one run — smaller baskets cost more to deliver than they are worth.',
       /* nav + chrome */
       nav_market:'Market', nav_prices:'Prices', nav_list:'My List', nav_basket:'Basket', nav_me:'Me',
       nav_demand:'Orders', nav_pickups:'Pickups', nav_score:'Score', nav_payouts:'Payouts',
@@ -31,7 +41,7 @@
       yes:'Yes', no:'No', all:'Everything', items:'items', week:'week', free:'Free',
 
       /* market */
-      streak_label:'Fresh streak', streak_weeks:'weeks', points_label:'Kasu points',
+      streak_label:'Fresh streak', streak_weeks:'weeks', points_label:'Kasua points',
       cheaper_today:'Cheaper today', vs_last_week:'vs last week',
       usual_title:'Your usual, again', usual_cta:'One tap',
       todays_market:"Today's market",
@@ -102,6 +112,15 @@
     },
 
     ig: {
+      w_tagline:'Tomato iri. Iri ha dị mma.',
+      w_sub:'Ihe ubi si Wuse, e ji aka nyochaa ma see foto tupu ọ hapụ ebe ahịa.',
+      w_lang:'Họrọ asụsụ gị',
+      w_where:'Ebee ka anyị ga-ebuga ya?',
+      w_start:'Malite ịzụ ahịa',
+      w_change:'Ị nwere ike ịgbanwe ha abụọ mgbe e mesịrị',
+      min_title:'Ihe kacha nta ị ga-azụ',
+      min_short:'Tinye {X} ọzọ ka ị kwụọ ụgwọ',
+      min_note:'Ịzụ ahịa na-amalite na {MIN}. Otu onye na-ebuga, otu njem — obere nkata na-efu ego karịa uru ọ bara.',
       nav_market:'Ahịa', nav_prices:'Ọnụahịa', nav_list:'Ndepụta m', nav_basket:'Nkata', nav_me:'Mụ',
       nav_demand:'Ihe achọrọ', nav_pickups:'Nnakọta', nav_score:'Ọkwa', nav_payouts:'Ụgwọ',
       nav_today:'Taa', nav_vendors:'Ndị na-ere', nav_quality:'Ịdị mma', nav_zones:'Mpaghara',
@@ -110,7 +129,7 @@
       back:'Laghachi', done:'Emechaa', cancel:'Kagbuo', confirm:'Kwado', add:'Tinye', added:'Etinyela',
       yes:'Ee', no:'Mba', all:'Ihe niile', items:'ihe', week:'izu', free:'N’efu',
 
-      streak_label:'Izu ọhụrụ', streak_weeks:'izu', points_label:'Akara Kasu',
+      streak_label:'Izu ọhụrụ', streak_weeks:'izu', points_label:'Akara Kasua',
       cheaper_today:'Dị ọnụ ala taa', vs_last_week:'karịa izu gara aga',
       usual_title:'Nke ị na-azụkarị', usual_cta:'Otu pị',
       todays_market:'Ahịa taa',
@@ -174,6 +193,15 @@
     },
 
     ha: {
+      w_tagline:'Tumatir goma. Goma masu kyau.',
+      w_sub:'Kayan lambu daga Wuse, an duba da hannu an kuma ɗauki hoto kafin ya bar shago.',
+      w_lang:'Zaɓi harshenka',
+      w_where:'Ina za mu kai?',
+      w_start:'Fara siyayya',
+      w_change:'Za ka iya canza duka biyu daga baya',
+      min_title:'Mafi ƙarancin oda',
+      min_short:'Ƙara {X} don ka biya',
+      min_note:'Oda na farawa daga {MIN}. Mai kaiwa ɗaya, tafiya ɗaya — ƙananan kwando sun fi tsada a kai fiye da darajarsu.',
       nav_market:'Kasuwa', nav_prices:'Farashi', nav_list:'Jerina', nav_basket:'Kwando', nav_me:'Ni',
       nav_demand:'Buƙata', nav_pickups:'Ɗauka', nav_score:'Maki', nav_payouts:'Biya',
       nav_today:'Yau', nav_vendors:'Masu sayarwa', nav_quality:'Inganci', nav_zones:'Yankuna',
@@ -182,7 +210,7 @@
       back:'Koma', done:'An gama', cancel:'Soke', confirm:'Tabbatar', add:'Ƙara', added:'An ƙara',
       yes:'Eh', no:"A'a", all:'Komai', items:'kaya', week:'mako', free:'Kyauta',
 
-      streak_label:'Sabbin makonni', streak_weeks:'makonni', points_label:'Maki Kasu',
+      streak_label:'Sabbin makonni', streak_weeks:'makonni', points_label:'Maki Kasua',
       cheaper_today:'Mai rahusa yau', vs_last_week:'idan aka kwatanta da makon jiya',
       usual_title:'Abin da ka saba saya', usual_cta:'Danna sau ɗaya',
       todays_market:'Kasuwar yau',
@@ -246,6 +274,15 @@
     },
 
     yo: {
+      w_tagline:'Tòmátì mẹ́wàá. Mẹ́wàá tó dára.',
+      w_sub:'Ọjà láti Wuse, a fi ọwọ́ yẹ̀ ẹ́ wò a sì ya fọ́tò rẹ̀ kí ó tó kúrò ní ibùdó.',
+      w_lang:'Yan èdè rẹ',
+      w_where:'Níbo ni kí a fi jíṣẹ́ sí?',
+      w_start:'Bẹ̀rẹ̀ ríra',
+      w_change:'O lè yí àwọn méjèèjì padà nígbà tó bá yá',
+      min_title:'Ìwọ̀n ìbéèrè tí ó kéré jù',
+      min_short:'Fi {X} kún un kí o tó sanwó',
+      min_note:'Ìbéèrè bẹ̀rẹ̀ ní {MIN}. Ẹni tó ń fijíṣẹ́ kan, ìrìn kan — agbọ̀n kékeré ná owó ìfijíṣẹ́ ju iye rẹ̀ lọ.',
       nav_market:'Ọjà', nav_prices:'Owó', nav_list:'Àkọsílẹ̀ mi', nav_basket:'Agbọ̀n', nav_me:'Èmi',
       nav_demand:'Ohun tí a fẹ́', nav_pickups:'Gbígbà', nav_score:'Àmì', nav_payouts:'Ìsanwó',
       nav_today:'Lónìí', nav_vendors:'Atáwọn', nav_quality:'Dídára', nav_zones:'Agbègbè',
@@ -254,7 +291,7 @@
       back:'Padà', done:'Ó parí', cancel:'Fagilé', confirm:'Fọwọ́ sí', add:'Fikun', added:'A ti fikun',
       yes:'Bẹ́ẹ̀ ni', no:'Bẹ́ẹ̀ kọ́', all:'Gbogbo rẹ̀', items:'ohun', week:'ọ̀sẹ̀', free:'Ọ̀fẹ́',
 
-      streak_label:'Ọ̀sẹ̀ tuntun', streak_weeks:'ọ̀sẹ̀', points_label:'Àmì Kasu',
+      streak_label:'Ọ̀sẹ̀ tuntun', streak_weeks:'ọ̀sẹ̀', points_label:'Àmì Kasua',
       cheaper_today:'Ó din owó lónìí', vs_last_week:'ní ìfiwéra ọ̀sẹ̀ tó kọjá',
       usual_title:'Ohun tí o máa ń rà', usual_cta:'Ìtẹ̀ kan',
       todays_market:'Ọjà òní',
@@ -321,7 +358,7 @@
   var current = 'en';
 
   function setLang(id) {
-    if (DICT[id]) { current = id; try { localStorage.setItem('kasu-lang', id); } catch (e) {} }
+    if (DICT[id]) { current = id; try { localStorage.setItem('kasua-lang', id); } catch (e) {} }
     return current;
   }
   function getLang() { return current; }
@@ -331,7 +368,7 @@
     return DICT.en[key] != null ? DICT.en[key] : key;
   }
 
-  try { var saved = localStorage.getItem('kasu-lang'); if (saved && DICT[saved]) current = saved; } catch (e) {}
+  try { var saved = localStorage.getItem('kasua-lang'); if (saved && DICT[saved]) current = saved; } catch (e) {}
 
   root.KL = { LANGS: LANGS, t: t, setLang: setLang, getLang: getLang, dict: DICT };
 })(window);

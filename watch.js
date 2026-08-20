@@ -1,4 +1,4 @@
-/* Kasu — zero-touch publisher.
+/* Kasua — zero-touch publisher.
    Watches the repo, and a few seconds after you stop saving it commits and
    pushes, so the live Pages site follows along.
 
